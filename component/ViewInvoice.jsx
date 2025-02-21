@@ -27,7 +27,8 @@ import React, { useRef,useState,useEffect } from 'react';
 import Header2 from '../Src/Header';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
- const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
+ //const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
+ const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
 
 
 const ViewInvoice = () => {
