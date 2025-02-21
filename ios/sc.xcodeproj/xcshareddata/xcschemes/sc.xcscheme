@@ -56,7 +56,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "sc.app"
-            BlueprintName = "sc"
+            BlueprintName = "Ninecreation"
             ReferencedContainer = "container:sc.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -73,7 +73,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "sc.app"
-            BlueprintName = "sc"
+            BlueprintName = "Ninecreation"
             ReferencedContainer = "container:sc.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
