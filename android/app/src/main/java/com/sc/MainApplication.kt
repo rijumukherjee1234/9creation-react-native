@@ -1,4 +1,4 @@
-package com.sc
+package com.ninecreation.prod
 
 import android.app.Application
 import com.facebook.react.PackageList

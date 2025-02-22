@@ -7,7 +7,7 @@ import React, { useRef,useState,useEffect } from 'react';
      responsiveWidth,
    } from 'react-native-responsive-dimensions';
   import AsyncStorage from '@react-native-async-storage/async-storage';
-  import  manageExternalStorage  from 'react-native-manage-external-storage';
+  // import  manageExternalStorage  from 'react-native-manage-external-storage';
   import FileViewer from 'react-native-file-viewer';
 // //   import * as FileSystem from 'expo-file-system'; 
   import { useNavigation, useRoute } from '@react-navigation/native';
@@ -99,16 +99,7 @@ const ViewInvoice = () => {
   
       useEffect(() => {
        
-        manageExternalStorage() 
-const requestManageExternalStoragePermission = async () => {
-  const permissionStatus = await request(PERMISSIONS.ANDROID.MANAGE_EXTERNAL_STORAGE);
-  if (permissionStatus === RESULTS.GRANTED) {
-    // Permission granted, proceed with file operations
-  } else {
-    // Open settings for the user to enable permission manually
-    Linking.openSettings();
-  }
-};
+
 
         const fetchData = async () => {
           const data = await AsyncStorage.getItem('projectData'); // Fetch stored data
