@@ -6,8 +6,12 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import Icon from "react-native-vector-icons/MaterialIcons";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios"
+import { API_ENDPOINTS } from '../Src/apicall';
+import { useNavigation } from '@react-navigation/native';
 const ChangePassword = () => {
+  const navigation = useNavigation();
   const usernameAnimated = useRef(new Animated.Value(0)).current;
   const passwordAnimated = useRef(new Animated.Value(0)).current;
   const [showPassword, setShowPassword] = useState(false);
@@ -38,9 +42,69 @@ const ChangePassword = () => {
       outputRange: [12, -17],
     });
   };
-  const HandleSave =()=>{
-
-  }
+  const HandleSave = async () => {
+    if (!oldpassword || !newpassword) {
+      alert("Please enter both old and new passwords.");
+      return;
+    }
+    let id = await AsyncStorage.getItem('userInfo');
+    if (id) {
+      id = JSON.parse(id); // Parse the JSON string into an object
+      console.log(id.UserId, "id");
+    } else {
+      console.log("No user info found");
+    }
+ 
+  
+    try {
+      // Retrieve token from AsyncStorage
+      const token = await AsyncStorage.getItem("permit");
+  
+      if (!token) {
+        alert("Unauthorized! Please log in again.");
+        return;
+      }
+  
+      const response = await axios.post(
+        API_ENDPOINTS.Update_password,
+        {INFO: {
+          ITEM: "SUB_CONTRACTOR_CHANGE_PASSWORD",
+          SUB_CONTRACTOR_SYS_ID:id.UserId,
+          OLD_PASSWORD: oldpassword,
+          NEW_PASSWORD: newpassword
+      }
+    },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+            "Content-Type": "application/json",  
+          },
+        }
+      );
+  
+      console.log("Response Data:", response.data);
+  
+      if (response.data.status === "true") {
+        alert("Password updated successfully!");
+        navigation.navigate('Home');
+     AsyncStorage.getItem('permit');
+        
+        AsyncStorage.removeItem("permit");
+  
+       
+       
+      } else {
+        alert(response.data.response );
+      }
+    } catch (error) {
+      console.error("Error updating password:", error);
+  
+      // Log and show the actual error from the server
+      alert(error.response?.data?.message || "An error occurred. Please try again.");
+    }
+  };
+  
+  
   return (
     <View style={Styles.main}>
       <View style={Styles.changepasstxt}>

@@ -576,7 +576,7 @@ const handleDelete = async () => {
 
        <View style={styles.inputBox}>
        <View>
-          <Text style={styles.inputtxt}>Invoice Number <Text style={{color:'red'}}>*</Text></Text>
+          <Text style={styles.inputtxtinvoice}>Invoice Number <Text style={{color:'red'}}>*</Text></Text>
           <TextInput
             style={styles.input}
             value={invoiceNumber}
@@ -596,7 +596,7 @@ const handleDelete = async () => {
         <Text style={styles.workstyl}>Work Description : {workdescription}</Text>
 
         <View>
-          <Text style={styles.inputtxt}>Job Description</Text>
+          <Text style={styles.inputtxtjob}>Job Description</Text>
           <TextInput
             style={styles.input}
             value={jobDescription}
@@ -607,7 +607,7 @@ const handleDelete = async () => {
           <Animated.Text
             style={[styles.Inputtxt, { transform: [{ translateY: BirthAnimated }] }]}
           >
-           Invoice Date<Text style={{color:'red'}}>*</Text>
+           Invoice Date<Text style={{color:'red',fontSize:responsiveFontSize(1.5)}}>*</Text>
           </Animated.Text>
           <TouchableOpacity onPress={toggleCalendar}>
   <TextInput
@@ -690,6 +690,7 @@ const handleDelete = async () => {
       )}
         {isFileVisiblefileupload && (
       <View style={{ flexDirection: 'row' }}>
+        
         <Text style={styles.textone}>File Name : {getfilename}</Text>
       
       </View>
@@ -710,13 +711,17 @@ const handleDelete = async () => {
       <Text style={styles.textone}>Upload Date and Time :{getuploaddatetime} </Text>
             )} 
               {isFileVisiblefilebutton && (
+                <View style={{ flexDirection: 'row' }}>
        <TouchableOpacity style={styles.submitbtn} onPress={submitInvoice}>
+       
+       
        {isLoading ? (
          <ActivityIndicator size="small" color="#fff" /> // Show loading spinner while submitting
        ) : (
          <Text style={styles.submitbtntxt}>Submit</Text> // Show Submit button when not loading
        )}
      </TouchableOpacity>
+     </View>
             )}
       </View>
     </ScrollView>
@@ -726,22 +731,29 @@ const handleDelete = async () => {
 export default ViewInvoice
 const styles = StyleSheet.create({
     MainContainer: {
-      marginVertical: responsiveHeight(2),
+      marginTop:responsiveHeight(1)
     },
       heading: {
         color: '#000',
-        fontWeight:'400',
         marginLeft: responsiveWidth(4),
-        fontSize: responsiveFontSize(2),
+        fontSize: responsiveFontSize(1.5),
         },
-        inputBox:{
-          marginTop:responsiveHeight(2)
+      
+        inputtxtinvoice:{
+          color: '#000',
+          marginLeft: responsiveWidth(4),
+          fontSize: responsiveFontSize(1.5),
+          marginTop:responsiveHeight(1)
         },
         inputtxt:{
           color: '#000',
           marginLeft: responsiveWidth(4),
-          marginTop: responsiveHeight(1),
-          fontSize: responsiveFontSize(2),
+          fontSize: responsiveFontSize(1.5),
+        },
+        inputtxtjob:{
+          color: '#000',
+          marginLeft: responsiveWidth(4),
+          fontSize: responsiveFontSize(1.5),
         },
         input:{
           width:responsiveWidth(90),
@@ -750,7 +762,6 @@ const styles = StyleSheet.create({
           marginTop: responsiveHeight(1),
           borderRadius:responsiveWidth(2),
           paddingLeft:responsiveWidth(2),
-          padding:responsiveWidth(2),
           color:'#000',
           fontWeight:'bold'
         },
@@ -761,7 +772,6 @@ const styles = StyleSheet.create({
           marginTop: responsiveHeight(1),
           borderRadius:responsiveWidth(2),
           paddingLeft:responsiveWidth(2),
-          padding:responsiveWidth(2),
           color:'#000',
           
         },
@@ -780,7 +790,6 @@ const styles = StyleSheet.create({
           backgroundColor:'#dedede',
           marginTop: responsiveHeight(1),
           borderRadius:responsiveWidth(2),
-          padding:responsiveWidth(2),
           borderWidth:1,
           borderColor:'#000'
         },
@@ -788,26 +797,26 @@ const styles = StyleSheet.create({
           color: '#000',
           marginLeft: responsiveWidth(4),
           marginTop: responsiveHeight(1),
-          fontSize: responsiveFontSize(2),
+          fontSize: responsiveFontSize(1.5),
         },
         textone:{
           color: '#000',
           marginLeft: responsiveWidth(4),
           marginTop: responsiveHeight(1),
-          fontSize: responsiveFontSize(2),
+          fontSize: responsiveFontSize(1.5),
           width:responsiveWidth(90)
         },
         textoneTotal:{
           color: '#000',
           marginLeft: responsiveWidth(4),
           marginTop: responsiveHeight(1),
-          fontSize: responsiveFontSize(2),
+          fontSize: responsiveFontSize(1.5),
         },
         sidetxt:{
           color: '#000',
           marginLeft: responsiveWidth(4),
           marginTop: responsiveHeight(1),
-          fontSize: responsiveFontSize(2),
+          fontSize: responsiveFontSize(1.5),
           paddingLeft:responsiveWidth(30),
             width:responsiveWidth(60)
         },
@@ -815,18 +824,19 @@ const styles = StyleSheet.create({
         btn:{
           borderWidth: 1,
           borderColor: '#ccc',
-          width:responsiveWidth(30),
+          width: responsiveWidth(40),
           padding: responsiveHeight(1),
           borderRadius: responsiveWidth(3),
           backgroundColor: '#4d8f91',
           marginTop: responsiveHeight(1),
-          marginLeft: responsiveWidth(3),
+          marginLeft: responsiveWidth(2),
         },
         btntxt:{
-          fontSize: responsiveFontSize(1.8),
+          fontSize: responsiveFontSize(1.5),
           fontWeight: 'bold',
           color: '#fff',
           textAlign: 'center',
+
         },
         submitbtn:{
           borderWidth: 1,
@@ -854,22 +864,21 @@ const styles = StyleSheet.create({
         },
   
         Inputtxt: {
-          fontSize: responsiveFontSize(2),
+          fontSize: responsiveFontSize(1.5),
           paddingLeft:responsiveWidth(4),
           color:'#000',
            paddingTop:responsiveHeight(1.5)
         },
         Input: {
-          fontSize: responsiveFontSize(2),
+          fontSize: responsiveFontSize(1.5),
           fontWeight:'600',
-          height:responsiveHeight(5),
+        height:'auto',
           width:responsiveWidth(90),
           backgroundColor:'#dedede',
           marginLeft: responsiveWidth(4),
           marginTop: responsiveHeight(1),
           borderRadius:responsiveWidth(2),
           paddingLeft:responsiveWidth(2),
-          padding:responsiveWidth(2)
         }
   
   })
