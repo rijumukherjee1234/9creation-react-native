@@ -376,7 +376,6 @@ const styles = StyleSheet.create({
     marginVertical: responsiveHeight(2),
   },
   heading: {
-    fontWeight:'500',
     marginLeft: responsiveWidth(4),
     fontSize: responsiveFontSize(1.8),
   },
@@ -384,8 +383,7 @@ const styles = StyleSheet.create({
     color: '#4d8f91',
     marginLeft: responsiveWidth(4),
     marginTop: responsiveHeight(2),
-    fontSize: responsiveFontSize(2.3),
-    fontWeight: 'bold',
+    fontSize: responsiveFontSize(2),
   },
   deatilsone: {
     borderWidth: 1,
@@ -398,12 +396,12 @@ const styles = StyleSheet.create({
   },
   txtone: {
     color: '#4d8f91',
-    fontSize: responsiveFontSize(2.5),
+    fontSize: responsiveFontSize(2.3),
     fontWeight: '700',
   },
   texttwo: {
     color: '#000',
-    fontSize: responsiveFontSize(1.8),
+    fontSize: responsiveFontSize(1.5),
   },
   btn: {
     borderWidth: 1,

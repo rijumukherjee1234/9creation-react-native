@@ -10,9 +10,9 @@ import {
   import { useNavigation } from '@react-navigation/native';
 import Header2 from '../Src/Header';
 import { API_ENDPOINTS } from '../Src/apicall';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 const AssetDetails = () => {
     const usernameAnimated = useRef(new Animated.Value(0)).current;
     const [getAllTaskList, setgetAllTaskList] = useState(null);
@@ -120,30 +120,30 @@ const AssetDetails = () => {
       <View style={{flexDirection:'row',gap:20,alignSelf:'center',marginTop:responsiveHeight(-2)}}>
       <View style={styles.box1}>
        <Image
-       source={require('../assets/homeIcon1.png')}
-       style={{
-        width: responsiveWidth(18),
-        height: responsiveHeight(8),
-        alignSelf: "center",
-        marginTop: responsiveHeight(2.5),
-        borderRadius: responsiveWidth(4),
-      }}
-       />
+             source={require('../assets/homeIcon1.png')}
+             style={{
+              width: responsiveWidth(17),
+              height: responsiveHeight(9),
+              alignSelf: "center",
+              marginTop: responsiveHeight(2.5),
+              borderRadius: responsiveWidth(4),
+            }}
+             />
        <Text style={styles.txtstyl}>Task Assigned</Text>
       </View>
 
 <TouchableOpacity onPress={handlepressTwoBox}>
       <View style={styles.box2}>
-       <Image
-       source={require('../assets/homeIcon2.png')}
-       style={{
-        width: responsiveWidth(18),
-        height: responsiveHeight(8),
-        alignSelf: "center",
-        marginTop: responsiveHeight(2.5),
-        borderRadius: responsiveWidth(4),
-      }}
-       />
+      <Image
+            source={require('../assets/homeIcon2.png')}
+            style={{
+             width: responsiveWidth(17),
+             height: responsiveHeight(9),
+             alignSelf: "center",
+             marginTop: responsiveHeight(2.5),
+             borderRadius: responsiveWidth(4),
+           }}
+            />
        <Text style={styles.txtstyl}>Previous Work Done</Text>
       </View>
       </TouchableOpacity>
@@ -159,15 +159,15 @@ const AssetDetails = () => {
           </View>
           <View>
             <View style={styles.lebelView}>
-              <AntDesign name="user" size={20} color="#4d8f91" style={styles.Icon} />
+              <MaterialCommunityIcons name="account" color="#4d8f91" size={20} style={styles.Icon} />
               <Text style={styles.lebelHeadingtxt}>Designer : { item.INTERIOR_DESIGNER_NAME || "N/A" }</Text>
             </View>
             <View style={styles.lebelView}>
-            <Fontisto name="date" size={20} color="#03031c" style={styles.Icon} />
+            <FontAwesome name="calendar" size={20} color="#03031c" style={styles.Icon} />
               <Text style={styles.lebelHeadingtxt}>Start Date :{ item.PROJECT_START_DATE || "N/A" }</Text>
             </View>
             <View style={styles.lebelView}>
-            <EvilIcons name="location" size={20} color="red" style={styles.Icon} />
+            <Ionicons name="location-sharp" size={20} color="red" style={styles.Icon} />
               <Text style={styles.lebelHeadingtxtaddress}>{ item.CUSTOMER_ADDRESS || "N/A" }</Text>
             </View>
           </View>
@@ -187,56 +187,56 @@ const styles = StyleSheet.create({
         marginVertical:responsiveHeight(2)
     },
     viewmain:{
-      borderWidth:1,
-    height:'auto',
-    width:responsiveWidth(95),
-    borderColor:'##a6a6a6',
-    alignSelf:'center',
-    borderRadius:responsiveWidth(1.5),
-    marginTop: responsiveHeight(1),
-    padding:responsiveWidth(3),
-    paddingLeft:responsiveWidth(3)
+      backgroundColor: 'white',
+      borderWidth: 1,
+      borderColor:'#a6a6a6',
+      alignSelf:'center',
+      borderRadius:responsiveWidth(1.5),
+      padding: responsiveWidth(1),
+      height:'auto',
+      width:responsiveWidth(95),
+      marginTop: responsiveHeight(1),
+      paddingLeft:responsiveWidth(3),
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 5,
     },
     heading:{
-        color:'#000',
-        fontWeight:'bold',
-        marginLeft:responsiveWidth(5),
-        marginTop:responsiveHeight(4),
-        fontSize:responsiveFontSize(2)
-    },
-    lebelView:{
-      paddingTop:responsiveHeight(0.3),
-      flexDirection:'row',
-      gap:2.5
-    },
-    lebelHeadingtxt:{
-      color: '#000',
-      fontSize: responsiveFontSize(1.5),
-      paddingLeft:responsiveWidth(1),
-      paddingTop:responsiveHeight(0.6),
-      fontWeight:'500',
-    },
-    lebelHeadingtxtaddress:{
-      fontWeight:'500',
-      fontSize: responsiveFontSize(1.5),
-      paddingLeft:responsiveWidth(1),
-      width:responsiveWidth(70)
-    },
-    lebelHeadingtxtmain:{
-      fontWeight:'500',
-      fontSize: responsiveFontSize(1.5),
-      paddingLeft:responsiveWidth(2)
-    },
-    lebelgtxt: {
-      color: '#000',
-      fontWeight:'500',
-      fontSize: responsiveFontSize(1.5),
-      paddingLeft:responsiveWidth(10)
-    },
-    lebelgtxtside: {
-      fontSize: responsiveFontSize(1.5),
-    color:'#ff0000'
-    },
+      color:'#000',
+      fontWeight:'bold',
+      marginLeft:responsiveWidth(5),
+      marginTop:responsiveHeight(4),
+      fontSize:responsiveFontSize(2)
+  },
+  lebelView:{
+    paddingTop:responsiveHeight(0.2),
+    flexDirection:'row',
+    gap:3
+  },
+  lebelHeadingtxt:{
+    fontSize: responsiveFontSize(1.5),
+    paddingLeft:responsiveWidth(2)
+  },
+  lebelHeadingtxtaddress:{
+    fontSize: responsiveFontSize(1.5),
+    paddingLeft:responsiveWidth(1),
+    width:responsiveWidth(70)
+  },
+  lebelHeadingtxtmain:{
+    fontSize: responsiveFontSize(1.5),
+    paddingLeft:responsiveWidth(2)
+  },
+  lebelgtxt: {
+    fontSize: responsiveFontSize(1.5),
+    paddingLeft:responsiveWidth(15),
+  },
+  lebelgtxtside: {
+    fontSize: responsiveFontSize(1.5),
+  color:'#ff0000',
+  width:responsiveWidth(30)
+  },
     button: {
         borderWidth: responsiveWidth(0.3),
         borderColor: '#fff',
@@ -297,7 +297,6 @@ const styles = StyleSheet.create({
       },
       Icon:{
         marginLeft:responsiveWidth(1),
-        marginTop:responsiveHeight(0.6)
       },
       button: {
         borderWidth: responsiveWidth(0.3),
@@ -319,25 +318,25 @@ const styles = StyleSheet.create({
       box1:{
         borderWidth:1,
         height:responsiveHeight(18),
-        width:responsiveWidth(45),
+        width:responsiveWidth(46),
         borderColor:'#c4c4c4',
         alignSelf: 'center',
         borderRadius:responsiveWidth(3),
-        marginTop: responsiveHeight(4),
+        marginTop: responsiveHeight(2.5),
       },
       box2:{
         borderWidth:1,
         height:responsiveHeight(18),
-        width:responsiveWidth(45),
+        width:responsiveWidth(46),
         borderColor:'#c4c4c4',
         alignSelf: 'center',
         borderRadius:responsiveWidth(3),
-        marginTop: responsiveHeight(4),
+        marginTop: responsiveHeight(2.5),
       },
       txtstyl:{
         textAlign:'center',
         color:'#4d8f91',
         paddingTop:responsiveHeight(1),
-        fontSize:responsiveFontSize(2)
+        fontSize:responsiveFontSize(1.7)
       }
 })

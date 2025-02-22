@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
     marginVertical: responsiveHeight(2),
   },
   heading: {
-    fontWeight: '500',
     marginLeft: responsiveWidth(4),
     fontSize: responsiveFontSize(1.5),
   },
@@ -115,7 +114,8 @@ const styles = StyleSheet.create({
   textside: {
     color: '#000',
     fontSize: responsiveFontSize(1.5),
-    paddingLeft: responsiveWidth(23),
+    paddingLeft: responsiveWidth(30),
+  
   },
   sidetxtvalue: {
     color: '#009933',

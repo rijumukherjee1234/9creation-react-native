@@ -44,7 +44,8 @@ navigation.navigate('Profilepage')
           style={{
             width: responsiveWidth(10),
             height: responsiveHeight(5),
-            marginTop:responsiveHeight(1.8)
+            marginTop:responsiveHeight(1.8),
+            marginLeft:responsiveWidth(5)
           }}
         />
         
@@ -71,15 +72,14 @@ text:{
     fontSize:responsiveFontSize(2)
 },
 iconstyle:{
-  marginLeft:responsiveWidth(5),
+  marginLeft:responsiveWidth(1),
   marginTop:responsiveHeight(1.7)
 },
 underline:{
   borderBottomWidth:1,
   borderColor:'#ababab',
-  width:responsiveWidth(90),
-  marginTop:responsiveHeight(2),
-  marginLeft: responsiveWidth(6),
+  width:'auto',
+  marginTop:responsiveHeight(2)
 },
 headertext:{
   marginTop:responsiveHeight(1.5),

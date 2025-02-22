@@ -8,10 +8,9 @@ import {
   import axios from "axios"
   import AsyncStorage from "@react-native-async-storage/async-storage";
   import { useNavigation } from '@react-navigation/native';
-  import AntDesign from 'react-native-vector-icons/AntDesign';
-  import Entypo from 'react-native-vector-icons/Entypo';
-  import Fontisto from 'react-native-vector-icons/Fontisto';
-  import EvilIcons from 'react-native-vector-icons/EvilIcons';
+  import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+  import FontAwesome from 'react-native-vector-icons/FontAwesome';
+  import Ionicons from 'react-native-vector-icons/Ionicons';
 import Header2 from '../Src/Header';
 import { API_ENDPOINTS } from '../Src/apicall';
 
@@ -130,15 +129,15 @@ const AssetDetailstwo = () => {
           </View>
           <View>
             <View style={styles.lebelView}>
-              <AntDesign name="user" size={20} color="#4d8f91" style={styles.Icon} />
+              <MaterialCommunityIcons name="account" color="#4d8f91" size={20} style={styles.Icon} />
               <Text style={styles.lebelHeadingtxt}>Designer : { item.INTERIOR_DESIGNER_NAME || "N/A" }</Text>
             </View>
             <View style={styles.lebelView}>
-            <Fontisto name="date" size={20} color="#03031c" style={styles.Icon} />
+          <FontAwesome name="calendar" size={20} color="#03031c" style={styles.Icon} />
               <Text style={styles.lebelHeadingtxt}>Start Date :{ item.PROJECT_START_DATE || "N/A" }</Text>
             </View>
             <View style={styles.lebelView}>
-            <EvilIcons name="location" size={20} color="red" style={styles.Icon} />
+           <Ionicons name="location-sharp" size={20} color="red" style={styles.Icon} />
               <Text style={styles.lebelHeadingtxtaddress}>{ item.CUSTOMER_ADDRESS || "N/A" }</Text>
             </View>
           </View>
@@ -154,18 +153,23 @@ const AssetDetailstwo = () => {
 export default AssetDetailstwo
 const styles = StyleSheet.create({
     Maincounter:{
-        marginVertical:responsiveHeight(2)
+        marginVertical:responsiveHeight(1)
     },
     viewmain:{
-      borderWidth:1,
+     borderWidth:1,
     height:'auto',
     width:responsiveWidth(95),
-    borderColor:'##a6a6a6',
+    borderColor:'#a6a6a6',
     alignSelf:'center',
     borderRadius:responsiveWidth(1.5),
     marginTop: responsiveHeight(1),
-    padding:responsiveWidth(3),
-    paddingLeft:responsiveWidth(3)
+    padding:responsiveWidth(2),
+    paddingLeft:responsiveWidth(3),
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 1,
     },
     heading:{
         color:'#000',
@@ -180,23 +184,19 @@ const styles = StyleSheet.create({
       gap:3
     },
     lebelHeadingtxt:{
-      fontWeight:'500',
       fontSize: responsiveFontSize(1.5),
       paddingLeft:responsiveWidth(2)
     },
     lebelHeadingtxtaddress:{
-      fontWeight:'500',
       fontSize: responsiveFontSize(1.5),
       paddingLeft:responsiveWidth(1),
       width:responsiveWidth(70)
     },
     lebelHeadingtxtmain:{
-      fontWeight:'500',
       fontSize: responsiveFontSize(1.5),
       paddingLeft:responsiveWidth(2)
     },
     lebelgtxt: {
-      fontWeight:'500',
       fontSize: responsiveFontSize(1.5),
       paddingLeft:responsiveWidth(10)
     },
@@ -263,7 +263,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
       },
       Iconlocation:{
-        marginLeft:responsiveWidth(1),
-        marginTop:responsiveHeight(0.2)
+        marginLeft:responsiveWidth(1)
       }
 })

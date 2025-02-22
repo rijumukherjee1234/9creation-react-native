@@ -32,8 +32,8 @@ const Dashboard = () => {
        <Image
        source={require('../assets/homeIcon1.png')}
        style={{
-        width: responsiveWidth(18),
-        height: responsiveHeight(8),
+        width: responsiveWidth(17),
+        height: responsiveHeight(9),
         alignSelf: "center",
         marginTop: responsiveHeight(2.5),
         borderRadius: responsiveWidth(4),
@@ -48,8 +48,8 @@ const Dashboard = () => {
        <Image
        source={require('../assets/homeIcon2.png')}
        style={{
-        width: responsiveWidth(18),
-        height: responsiveHeight(8),
+        width: responsiveWidth(17),
+        height: responsiveHeight(9),
         alignSelf: "center",
         marginTop: responsiveHeight(2.5),
         borderRadius: responsiveWidth(4),
@@ -87,27 +87,27 @@ const styles = StyleSheet.create({
       },
       box1:{
         borderWidth:1,
-        height:responsiveHeight(18),
+        height:responsiveHeight(22),
         width:responsiveWidth(45),
         borderColor:'#c4c4c4',
         alignSelf: 'center',
         borderRadius:responsiveWidth(3),
-        marginTop: responsiveHeight(4),
+        marginTop: responsiveHeight(2.5),
       },
       box2:{
         borderWidth:1,
-        height:responsiveHeight(18),
+        height:responsiveHeight(22),
         width:responsiveWidth(45),
         borderColor:'#c4c4c4',
         alignSelf: 'center',
         borderRadius:responsiveWidth(3),
-        marginTop: responsiveHeight(4),
+        marginTop: responsiveHeight(2.5),
       },
       txtstyl:{
         textAlign:'center',
         color:'#4d8f91',
         paddingTop:responsiveHeight(1),
-        fontSize:responsiveFontSize(2)
+        fontSize:responsiveFontSize(1.7)
       }
       
 })

@@ -316,7 +316,7 @@ console.log(getfilename,fileType,"ios_file");
         <Text style={styles.heading}>Designer : { projectData[0].INTERIOR_DESIGNER_NAME}</Text>
         <Text style={styles.heading}>{ projectData[0].CUSTOMER_ADDRESS}</Text>
 
-        <Text style={styles.TaskHeading}>Task</Text>
+        <Text style={styles.TaskHeading}>Tasks</Text>
 
         {loading ? (
   <ActivityIndicator size="large" color="#0000ff" />
@@ -327,7 +327,7 @@ console.log(getfilename,fileType,"ios_file");
         {item.INVOICE_STATUS === "Completed" && (
            <View style={styles.deatilsone}>
           <>
-            <View style={{ marginTop: responsiveHeight(3), marginLeft: responsiveWidth(2) }}>
+            <View style={{ marginTop: responsiveHeight(2), marginLeft: responsiveWidth(2) }}>
               <Text style={styles.txtone}>
                 {item.WORK_CATEGORY_VALUE} ({item.TYPE})
               </Text>
@@ -343,17 +343,24 @@ console.log(getfilename,fileType,"ios_file");
             {item.WORK_CATEGORY_VALUE === 'Preliminaries Works' &&
               (Array.isArray(image_store) && image_store.length > 0 ? (
                 image_store.map((photo, index) => (
+                  <View style={styles.boxView}>
+                    
                   <View key={index} style={styles.photoContainer}>
-                    <TouchableOpacity onPress={() => handleDownload(photo)}>
-                      <AntDesign name="download" size={20} color="#4d8f91" style={styles.Icon} />
-                    </TouchableOpacity>
+                    
                     <Image
                       source={{ uri: generateImageUrl(photo.FILE_NAME) }}
                       style={styles.image}
                     />
-                       <TouchableOpacity onPress={() => handleDelete(photo)}>
-                    <AntDesign name="delete" size={20} color="red" style={styles.Icon} />
+                       
+                  </View>
+                  <View style={{flexDirection:'row',gap:20}}>
+                  <TouchableOpacity onPress={() => handleDownload(photo)}>
+                      <AntDesign name="download" size={20} color="#4d8f91" style={styles.Icon} />
                     </TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleDelete(photo)}>
+                    <AntDesign name="delete" size={20} color="red" style={styles.Deleteicon} />
+                    </TouchableOpacity>
+                    </View>
                   </View>
                 ))
               ) : (
@@ -378,7 +385,6 @@ const styles = StyleSheet.create({
     marginVertical: responsiveHeight(2),
   },
   heading: {
-    fontWeight:'500',
     marginLeft: responsiveWidth(4),
     fontSize: responsiveFontSize(1.8),
   },
@@ -386,8 +392,7 @@ const styles = StyleSheet.create({
     color: '#4d8f91',
     marginLeft: responsiveWidth(4),
     marginTop: responsiveHeight(2),
-    fontSize: responsiveFontSize(2.3),
-    fontWeight: 'bold',
+    fontSize: responsiveFontSize(2),
   },
   deatilsone: {
     borderWidth: 1,
@@ -405,39 +410,51 @@ const styles = StyleSheet.create({
   },
   texttwo: {
     color: '#000',
-    fontSize: responsiveFontSize(1.8),
+    fontSize: responsiveFontSize(1.5),
   },
   btn: {
     borderWidth: 1,
     borderColor: '#ccc',
-    width: responsiveWidth(40),
-    padding: responsiveHeight(1),
-    borderRadius: responsiveWidth(3),
+    width: responsiveWidth(35),
+    height:'auto',
+    borderRadius: responsiveWidth(2),
     backgroundColor: '#4d8f91',
     marginTop: responsiveHeight(2),
     marginLeft: responsiveWidth(2),
   },
   btntxt: {
-    fontSize: responsiveFontSize(1.8),
+    fontSize: responsiveFontSize(1.5),
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',
+  padding:responsiveWidth(1)
   },
   photoContainer: {
     marginTop: responsiveHeight(2),
     flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft:responsiveWidth(3)
+    marginLeft:responsiveWidth(1),
+    borderWidth: 1,
+    borderColor:'#9966ff',
+    width:responsiveWidth(60)
+
+  },
+  boxView:{
+  marginVertical:responsiveHeight(1)
   },
   image: {
-    width: responsiveWidth(60),
+    width: responsiveWidth(50),
     height: responsiveHeight(18),
-    borderRadius: responsiveWidth(4),
-    marginTop: responsiveHeight(2),
+    resizeMode: 'cover',
   },
   Icon: {
-  marginTop:responsiveHeight(20)
+  marginTop:responsiveHeight(1),
+  marginLeft:responsiveWidth(1)
   },
+  Deleteicon:{
+    marginTop:responsiveHeight(1),
+    marginLeft:responsiveWidth(45),
+    width:responsiveWidth(30)
+  }
 });
 
 export default VerifiedAsset;
