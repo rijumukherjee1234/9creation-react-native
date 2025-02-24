@@ -7,12 +7,14 @@ import React, { useRef,useState,useEffect } from 'react';
      responsiveWidth,
    } from 'react-native-responsive-dimensions';
   import AsyncStorage from '@react-native-async-storage/async-storage';
+  // import Share from 'react-native-share';
+
   // import  manageExternalStorage  from 'react-native-manage-external-storage';
   import FileViewer from 'react-native-file-viewer';
 // //   import * as FileSystem from 'expo-file-system'; 
   import { useNavigation, useRoute } from '@react-navigation/native';
   import RNFetchBlob from 'rn-fetch-blob'
-  import messaging from "@react-native-firebase/messaging";
+  // import messaging from "@react-native-firebase/messaging";
   import { Calendar } from 'react-native-calendars';
   import moment from 'moment';
   // import FileViewer from 'react-native-file-viewer';
@@ -26,7 +28,7 @@ import React, { useRef,useState,useEffect } from 'react';
  import { API_ENDPOINTS } from '../Src/apicall';
 import Header2 from '../Src/Header';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
+import Share from 'react-native-share';
  //const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
  const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
 
@@ -266,6 +268,12 @@ const ViewInvoice = () => {
       return true; // Android 11+ doesn't require this permission for downloads
     };
     
+  
+    
+    
+    
+    
+    
     const handleDownload = async () => {
       try {
         const fileUrl = encodeURI(generateImageUrl(getapifilename));
@@ -290,33 +298,38 @@ const ViewInvoice = () => {
         const res = await downloadResumable.promise;
         console.log('File downloaded to cache:', tempFileUri);
     
-        if (Platform.OS === 'android') {
-          if (Platform.Version < 29) {
-            console.log("Checking storage permissions for Android 10 and below...");
-            const hasPermission = await requestStoragePermission();
-            if (!hasPermission) {
-              Alert.alert('Permission Denied', 'Storage permission is required to save the file.');
-              return;
-            }
-          }
+        if (Platform.OS === 'ios') {
+          console.log("Saving file to Documents directory...");
+          const documentsPath = `${RNFS.DocumentDirectoryPath}/${fileName}`;
     
+          await RNFS.moveFile(tempFileUri, documentsPath);
+          console.log('File successfully saved to:', documentsPath);
+    
+          Alert.alert('Success', 'Your file has been saved.');
+    
+          // 📌 Open iOS Share Sheet to let user save it in "Files"
+          Share.open({
+            url: `file://${documentsPath}`,
+            type: 'application/pdf', // Change the MIME type based on your file
+            saveToFiles: true, // Ensures "Save to Files" option appears
+          });
+    
+        } else if (Platform.OS === 'android') {
           console.log("Saving file to Downloads folder...");
           const downloadPath = `${RNFS.DownloadDirectoryPath}/${fileName}`;
-    
-          // Android 10+ (API 29+) can use MediaStore API via RNFetchBlob
-          await RNFetchBlob.fs.cp(tempFileUri, downloadPath);
+          await RNFS.moveFile(tempFileUri, downloadPath);
           console.log('File successfully saved to:', downloadPath);
     
-          Alert.alert('Success', `Your file has been successfully saved to the Downloads folder.`);
-          // sendDownloadNotification(fileName, downloadPath);
-        } else {
-          Alert.alert('Unsupported', 'Downloading is only supported on Android.');
+          Alert.alert('Success', `Your file has been successfully saved.`);
         }
       } catch (error) {
         console.log('Error saving file:', error);
         Alert.alert('Download Error', 'An error occurred while downloading the file.');
       }
     };
+    
+    
+    
    
     
     
@@ -377,9 +390,20 @@ const handleDelete = async () => {
   };
   
   const handleFilePick = async () => {
+  
     try {
+    
       const result = await DocumentPicker.pickSingle({
-        type: "*/*", // Accept all file types
+        type: [
+        "public.item", 
+        "public.content", 
+        "public.data", 
+        "application/pdf", 
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+        "application/vnd.ms-excel", 
+        "image/*",
+        "text/plain"
+      ], // Accept all file types
         copyToCacheDirectory: true,  // Optional, to copy to a temporary directory
       });
   
@@ -504,7 +528,7 @@ const handleDelete = async () => {
       // Prepare FormData
       const formData = new FormData();
   
-      if (imageURI.startsWith('content://')) {
+      if (imageURI.startsWith('file:///')) {
         // Extract file name and MIME type
         const fileName = imageURI.split('/').pop();
         console.log(fileName,"riju");
