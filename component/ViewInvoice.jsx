@@ -392,8 +392,10 @@ const handleDelete = async () => {
   const handleFilePick = async () => {
   
     try {
-    
-      const result = await DocumentPicker.pickSingle({
+      let result;
+    //condition handle ios/android
+    if (Platform.OS === 'ios') {
+       result = await DocumentPicker.pickSingle({
         type: [
         "public.item", 
         "public.content", 
@@ -406,7 +408,13 @@ const handleDelete = async () => {
       ], // Accept all file types
         copyToCacheDirectory: true,  // Optional, to copy to a temporary directory
       });
-  
+    }
+    else if(Platform.OS === 'android'){
+       result = await DocumentPicker.pickSingle({
+        type: "*/*", // Accept all file types
+        copyToCacheDirectory: true,
+      });
+    }
       // Ensure the result contains the proper file details
       const originalFileName = result.name;  // The name of the file picked
       const originalFileUri = result.uri;    // The URI of the file
@@ -544,7 +552,24 @@ const handleDelete = async () => {
           name: getfilename, // File name
           type: fileType, // File MIME type
         });
-      } else {
+      } else if (imageURI.startsWith('content://')) {
+        // Extract file name and MIME type
+        const fileName = imageURI.split('/').pop();
+        console.log(fileName,"riju");
+        
+        const fileType = `image/${fileName.split('.').pop()}`;
+        console.log(fileType,"riju");
+        console.log(imageURI,"imageURI");
+        
+  
+        // Append file to FormData
+        formData.append('FILE', {
+          uri: imageURI, // Local file URI
+          name: getfilename, // File name
+          type: fileType, // File MIME type
+        });
+      }
+      else {
         console.log("Processing non-local image URI");
   
         // Fetch blob for non-local URIs

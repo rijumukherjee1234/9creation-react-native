@@ -2,17 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-<key>NSPhotoLibraryUsageDescription</key>
-<string>App needs access to your photo library to save files.</string>
-<key>NSDocumentsDirectoryUsageDescription</key>
-<string>App needs access to your documents to save files.</string>
-<key>NSDocumentsDirectoryUsageDescription</key>
-<string>We need access to your documents to upload files.</string>
-<key>LSSupportsOpeningDocumentsInPlace</key>
-<true/>
-<key>UIFileSharingEnabled</key>
-<true/>
-
+	<key>UIAppFonts</key>
+	<array>
+		<string></string>
+	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>App needs access to your photo library to save files.</string>
+	<key>NSDocumentsDirectoryUsageDescription</key>
+	<string>We need access to your documents to upload files.</string>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -37,7 +38,6 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-	  <!-- Do not change NSAllowsArbitraryLoads to true, or you will risk app rejection! -->
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
@@ -51,13 +51,33 @@
 	<array>
 		<string>arm64</string>
 	</array>
-	<key>UISupportedInterfaceOrientations</key>
+  <key>UIAppFonts</key>
+  <array>
+    <string>AntDesign.ttf</string>
+    <string>Entypo.ttf</string>
+    <string>EvilIcons.ttf</string>
+    <string>Feather.ttf</string>
+    <string>FontAwesome.ttf</string>
+    <string>FontAwesome5_Brands.ttf</string>
+    <string>FontAwesome5_Regular.ttf</string>
+    <string>FontAwesome5_Solid.ttf</string>
+    <string>FontAwesome6_Brands.ttf</string>
+    <string>FontAwesome6_Regular.ttf</string>
+    <string>FontAwesome6_Solid.ttf</string>
+    <string>Foundation.ttf</string>
+    <string>Ionicons.ttf</string>
+    <string>MaterialIcons.ttf</string>
+    <string>MaterialCommunityIcons.ttf</string>
+    <string>SimpleLineIcons.ttf</string>
+    <string>Octicons.ttf</string>
+    <string>Zocial.ttf</string>
+    <string>Fontisto.ttf</string>
+  </array>	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>

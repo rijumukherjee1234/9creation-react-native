@@ -10,6 +10,7 @@ import DocumentPicker from 'react-native-document-picker';
 import RNFetchBlob from 'rn-fetch-blob'
 import RNFS from 'react-native-fs';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Share from 'react-native-share';
 // import * as FileSystem from 'expo-file-system';  // Import expo-file-system for downloading files
 // import * as DocumentPicker from "expo-document-picker";
  //const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
@@ -128,10 +129,27 @@ const uploadDrawingDetails = async (payload) => {
 // Main function to handle file pick and upload
 const handleFilePick = async () => {
   try {
+    let result;
+    if (Platform.OS === 'ios') {
+result = await DocumentPicker.pickSingle({
+      type: [
+            "public.item", 
+            "public.content", 
+            "public.data", 
+             "application/pdf", 
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+              "application/vnd.ms-excel", 
+               "image/*",
+             "text/plain"
+      ], // Accept all file types
+      copyToCacheDirectory: true,  // Optional, to copy to a temporary directory
+      });
+    }else if(Platform.OS === 'android'){
     const result = await DocumentPicker.pickSingle({
       type: "*/*", // Accept all file types
       copyToCacheDirectory: true,  // Optional, to copy to a temporary directory
     });
+  }
 
   
   
@@ -267,9 +285,19 @@ const uploadFile = async (imageURI,filename) => {
                 Alert.alert('Download Complete', 'Your file has been successfully saved to the Downloads folder.');
 
              
-              } else {
-                Alert.alert('Unsupported', 'Downloading is only supported on Android.');
-              }
+              } else if(Platform.OS === 'ios') {
+                console.log("Saving file to Documents directory...");
+                const documentsPath = `${RNFS.DocumentDirectoryPath}/${fileName}`;
+                await RNFS.moveFile(tempFileUri, documentsPath);
+                console.log('File successfully saved to:', documentsPath);
+                Alert.alert('Success', 'Your file has been saved.');
+      // 📌 Open iOS Share Sheet to let user save it in "Files"
+      Share.open({
+     url: `file://${documentsPath}`,
+     type: 'application/pdf', // Change the MIME type based on your file
+     saveToFiles: true, // Ensures "Save to Files" option appears
+    });
+  }
      } catch (error) {
        console.log('Error saving file:', error);
        Alert.alert('Error', 'Failed to save the file.');
