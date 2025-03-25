@@ -1,4 +1,4 @@
-import { View, Text,Image, StyleSheet,TouchableOpacity,ActivityIndicator, ScrollView,Animated,TextInput } from 'react-native'
+import { View, Text,Image, StyleSheet,TouchableOpacity,ActivityIndicator,RefreshControl, ScrollView,Animated,TextInput } from 'react-native'
 import React,{ useState, useEffect,useRef } from 'react';
 import {
     responsiveFontSize,
@@ -17,6 +17,7 @@ import { API_ENDPOINTS } from '../Src/apicall';
 
 const AssetDetailstwo = () => {
     const usernameAnimated = useRef(new Animated.Value(0)).current;
+    const scrollY = useRef(new Animated.Value(0)).current;
     const [getAllTaskList, setgetAllTaskList] = useState(null);
     const [compoundCode, setCompoundCode] = useState('');
     const navigation = useNavigation();
@@ -24,18 +25,21 @@ const AssetDetailstwo = () => {
     const [assignTask, setassignTask] = useState([]);
     const [loading, setLoading] = useState(false);
     const [mergedProjects, setMergedProjects] = useState([]);
+    const [refreshing, setRefreshing] = useState(false); // Refresh state
 
     useEffect(() => {
+          fetchAllGetData();
+        }, []);
         const fetchAllGetData = async () => {
-          const getData = await AsyncStorage.getItem("userInfo");
-          const subid=JSON.parse(getData)
           setLoading(true);
          
           try {
+            const getData = await AsyncStorage.getItem("userInfo");
+            const subid=JSON.parse(getData)
             const token = await AsyncStorage.getItem('permit');
             if (!token) {
-         
               setLoading(false);
+              setRefreshing(false);
               return;
             }
            
@@ -57,10 +61,16 @@ const AssetDetailstwo = () => {
          
           } finally {
             setLoading(false);
+            setRefreshing(false); // Stop refreshing state
           }
         };
-          fetchAllGetData();
-        }, []);
+
+        const onRefresh = async () => {
+          console.log("Refreshing started...");
+          setRefreshing(true); 
+          await fetchAllGetData(); // Call API and let it handle stopping refresh
+          console.log("Refreshing should now stop.");
+      };
        
         const mergeProjects = (projects) => {
           const merged = {};
@@ -114,7 +124,10 @@ const AssetDetailstwo = () => {
       };
      
   return (
-    <ScrollView>
+    <ScrollView 
+    refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+  }>
       <Header2/>
 
       <View style={styles.Maincounter}>

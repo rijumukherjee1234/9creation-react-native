@@ -1,5 +1,5 @@
 
-import { View, Text, ScrollView,StyleSheet,ActivityIndicator , PermissionsAndroid, Alert, Linking,Platform,TextInput,TouchableOpacity,Animated } from 'react-native'
+import { View, Text, ScrollView,StyleSheet,ActivityIndicator , PermissionsAndroid, Alert, Linking,Platform,TextInput,TouchableOpacity,Animated,Dimensions } from 'react-native'
 import React, { useRef,useState,useEffect } from 'react';
  import {
      responsiveFontSize,
@@ -9,6 +9,7 @@ import React, { useRef,useState,useEffect } from 'react';
   import AsyncStorage from '@react-native-async-storage/async-storage';
   // import  manageExternalStorage  from 'react-native-manage-external-storage';
   import FileViewer from 'react-native-file-viewer';
+  import Toast from 'react-native-toast-message';
 // //   import * as FileSystem from 'expo-file-system'; 
   import { useNavigation, useRoute } from '@react-navigation/native';
   import RNFetchBlob from 'rn-fetch-blob'
@@ -27,8 +28,8 @@ import React, { useRef,useState,useEffect } from 'react';
 import Header2 from '../Src/Header';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
- const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
-//  const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
+//  const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
+  const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
 
 
 const ViewInvoice = () => {
@@ -230,27 +231,8 @@ const ViewInvoice = () => {
         }
         return 'https://path-to-default-image.com/default-image.jpg'; // Default image URL
       };
-      
-    //   import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-
-   
 
 
-
-
-
-    // import { PermissionsAndroid, Alert, Linking, Platform } from 'react-native';
-
-   
-
-   
-
-    
-
-    // import { Alert, Platform, PermissionsAndroid } from 'react-native';
-    // import RNFS from 'react-native-fs';
-    // import RNFetchBlob from 'rn-fetch-blob';
-    
     const requestStoragePermission = async () => {
       if (Platform.OS === 'android' && Platform.Version < 29) { // Android 10 and below
         try {
@@ -307,8 +289,16 @@ const ViewInvoice = () => {
           await RNFetchBlob.fs.cp(tempFileUri, downloadPath);
           console.log('File successfully saved to:', downloadPath);
     
-          Alert.alert('Success', `Your file has been successfully saved to the Downloads folder.`);
+          // Alert.alert('Success', `Your file has been successfully saved to the Downloads folder.`);
           // sendDownloadNotification(fileName, downloadPath);
+          Toast.show({
+            type: 'success',
+            text1: 'Download Complete',
+            text2: `${fileName} saved to Downloads`,
+            position: "center",
+            topOffset: Math.round(Dimensions.get("window").height / 2) - 100,
+            onPress: () => openFile(downloadPath),
+          });
         } else {
           Alert.alert('Unsupported', 'Downloading is only supported on Android.');
         }
@@ -317,12 +307,14 @@ const ViewInvoice = () => {
         Alert.alert('Download Error', 'An error occurred while downloading the file.');
       }
     };
-   
-    
-    
-    
-
-
+    const openFile = async (filePath) => {
+      try {
+        await FileViewer.open(filePath);
+      } catch (error) {
+        console.error('Error opening file:', error);
+        Alert.alert('Error', 'Cannot open this file.');
+      }
+    };
       
             // Helper function for MIME type
   const getMimeType = (fileName) => {
@@ -720,6 +712,7 @@ const handleDelete = async () => {
      </View>
             )}
       </View>
+      <Toast />
     </ScrollView>
   )
 }

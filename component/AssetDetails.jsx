@@ -1,4 +1,4 @@
-import { View, Text,Image, StyleSheet,TouchableOpacity,ActivityIndicator, ScrollView,Animated,TextInput } from 'react-native'
+import { View, Text,Image, StyleSheet,TouchableOpacity,ActivityIndicator,RefreshControl, ScrollView,Animated,TextInput } from 'react-native'
 import React,{ useState, useEffect,useRef } from 'react';
 import {
     responsiveFontSize,
@@ -22,18 +22,25 @@ const AssetDetails = () => {
     const [assignTask, setassignTask] = useState([]);
     const [loading, setLoading] = useState(false);
     const [mergedProjects, setMergedProjects] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
+      
+          fetchAllGetData();
+        }, []);
         const fetchAllGetData = async () => {
-          const getData = await AsyncStorage.getItem("userInfo");
-          const subid=JSON.parse(getData)
+         
+       
           setLoading(true);
          
           try {
+            const getData = await AsyncStorage.getItem("userInfo");
+            const subid=JSON.parse(getData)
             const token = await AsyncStorage.getItem('permit');
             if (!token) {
-         
+        
               setLoading(false);
+              setRefreshing(false);
               return;
             }
            
@@ -55,10 +62,17 @@ const AssetDetails = () => {
          
           } finally {
             setLoading(false);
+            setRefreshing(false); // Stop refreshing state
+           
           }
         };
-          fetchAllGetData();
-        }, []);
+
+        const onRefresh = async () => {
+          console.log("Refreshing started...");
+          setRefreshing(true); 
+          await fetchAllGetData(); // Call API and let it handle stopping refresh
+          console.log("Refreshing should now stop.");
+      };
        
         const mergeProjects = (projects) => {
           const merged = {};
@@ -114,7 +128,10 @@ const AssetDetails = () => {
         navigation.navigate('AssetDetailstwopage');
       }
   return (
-    <ScrollView>
+    <ScrollView 
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }>
         <Header2/>
       <View style={styles.Maincounter}>
       <View style={{flexDirection:'row',gap:20,alignSelf:'center',marginTop:responsiveHeight(-2)}}>

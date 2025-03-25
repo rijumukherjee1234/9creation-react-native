@@ -33,7 +33,7 @@ navigation.navigate('Profilepage')
         <View style={styles.container}>
           <View style={{flexDirection:'row',marginTop:responsiveHeight(2)}}>
              <TouchableOpacity onPress={() => navigation.goBack()}>
-         <MaterialCommunityIcons name="less-than" size={16} color="green" style={styles.iconstyle}/>
+         <MaterialCommunityIcons name="less-than" size={25} color="green" style={styles.iconstyle}/>
          </TouchableOpacity>
          <Text style={styles.headertext}>Welcome {name}</Text>
          </View>
@@ -82,8 +82,9 @@ underline:{
   marginTop:responsiveHeight(2)
 },
 headertext:{
-  marginTop:responsiveHeight(1.5),
+  marginTop:responsiveHeight(1.8),
   marginLeft:responsiveWidth(1),
-  fontWeight:'600'
+  fontWeight:'600',
+  fontSize:responsiveFontSize(1.8)
   }
 })
