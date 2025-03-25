@@ -33,7 +33,7 @@ const Dashboard = () => {
        source={require('../assets/homeIcon1.png')}
        style={{
         width: responsiveWidth(17),
-        height: responsiveHeight(9),
+        height: responsiveHeight(8),
         alignSelf: "center",
         marginTop: responsiveHeight(2.5),
         borderRadius: responsiveWidth(4),
@@ -49,7 +49,7 @@ const Dashboard = () => {
        source={require('../assets/homeIcon2.png')}
        style={{
         width: responsiveWidth(17),
-        height: responsiveHeight(9),
+        height: responsiveHeight(8),
         alignSelf: "center",
         marginTop: responsiveHeight(2.5),
         borderRadius: responsiveWidth(4),
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
       },
       box1:{
         borderWidth:1,
-        height:responsiveHeight(22),
+        height:responsiveHeight(20),
         width:responsiveWidth(45),
         borderColor:'#c4c4c4',
         alignSelf: 'center',
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
       },
       box2:{
         borderWidth:1,
-        height:responsiveHeight(22),
+        height:responsiveHeight(20),
         width:responsiveWidth(45),
         borderColor:'#c4c4c4',
         alignSelf: 'center',

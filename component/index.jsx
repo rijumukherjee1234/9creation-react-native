@@ -6,7 +6,6 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import Icon from "react-native-vector-icons/MaterialIcons";
-// import { useNavigation } from 'expo-router';
 import axios from "axios";
   import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from '@react-navigation/native';
@@ -71,7 +70,7 @@ const Login = () => {
 
     try {
         const response = await axios.post(
-            'https://erpapi.9creation.com.sg/api/sub-contractor/api-login', {
+            'https://dev-ninecreationapi.devxportal.com/api/sub-contractor/api-login', {
               USER_NAME: username,
             PASSWORD: password,
         });

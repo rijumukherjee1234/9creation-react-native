@@ -27,8 +27,8 @@ import React, { useRef,useState,useEffect } from 'react';
 import Header2 from '../Src/Header';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
- //const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
- const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
+ const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
+//  const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
 
 
 const ViewInvoice = () => {
@@ -701,11 +701,7 @@ const handleDelete = async () => {
                            <AntDesign name="download" size={20} color="#4d8f91" style={styles.Icon} />
                          </TouchableOpacity>
         )}
-        {isFileVisible && (
-                         <TouchableOpacity onPress={() => handleDelete()}>
-      <AntDesign name="delete" size={20} color="#ff0000" style={styles.IconDelete} />
-</TouchableOpacity>
-          )}
+       
           </View>
           {isFileVisible && (
       <Text style={styles.textone}>Upload Date and Time :{getuploaddatetime} </Text>

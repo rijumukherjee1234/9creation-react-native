@@ -13,8 +13,8 @@ import RNFS from 'react-native-fs';
 import { request, PERMISSIONS,RESULTS  } from 'react-native-permissions';
 // import * as FileSystem from 'expo-file-system';  // Import expo-file-system for downloading files
 // import * as DocumentPicker from "expo-document-picker";
- //const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
-const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
+ const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
+// const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
 
 
 const VerifiedAsset = () => {
