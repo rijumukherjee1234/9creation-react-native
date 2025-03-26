@@ -21,6 +21,7 @@ import React, { useRef,useState,useEffect } from 'react';
    import RNFS from 'react-native-fs';
   
    import DocumentPicker from 'react-native-document-picker';
+   import { launchCamera } from 'react-native-image-picker';
    import { request, PERMISSIONS,RESULTS  } from 'react-native-permissions';
 //   import Toast from 'react-native-toast-message';
 //   // import axios from 'axios';
@@ -28,8 +29,10 @@ import React, { useRef,useState,useEffect } from 'react';
 import Header2 from '../Src/Header';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-//  const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
-  const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
+
+
+ const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
+  // const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
 
 
 const ViewInvoice = () => {
@@ -55,6 +58,7 @@ const ViewInvoice = () => {
     const [isFileVisiblefile, setIsFileVisiblefile] = useState(false);
     const [isFileVisiblefileupload, setisFileVisiblefileupload] = useState(false);
     const [isFileVisiblefilebutton, setisFileVisiblefilebutton] = useState(false);
+    const [fileName, setFileName] = useState('');
     
     const [amountBeforeGST, setAmountBeforeGST] = useState('');
     const [gstAmount, setGstAmount] = useState('');
@@ -368,42 +372,91 @@ const handleDelete = async () => {
     }
   };
   
+  // const handleFilePick = async () => {
+  //   try {
+  //     const result = await DocumentPicker.pickSingle({
+  //       type: "*/*", // Accept all file types
+  //       copyToCacheDirectory: true,  // Optional, to copy to a temporary directory
+  //     });
+  
+  //     // Ensure the result contains the proper file details
+  //     const originalFileName = result.name;  // The name of the file picked
+  //     const originalFileUri = result.uri;    // The URI of the file
+  
+  //     console.log(result, "originalFileUri");
+  
+  //     if (originalFileName) {
+  //       console.warn("Original File Name:", originalFileName);
+  
+  //       // Extract the file extension
+  //       const fileExtension = originalFileName.split('.').pop(); // Extract file extension
+  //       const baseFileName = originalFileName.replace(`.${fileExtension}`, ''); // Remove the extension
+  //       const updatedFileName = `${baseFileName}_invoice.${fileExtension}`; // Add "_invoice" to the base name
+  
+  //       setgetFileName(updatedFileName);  // Set the updated file name
+  //       setIsFileVisible(true);  // Show the selected file
+  //       setFileUri(originalFileUri);  // Store the URI for uploading
+  
+  //       setIsFileVisible(false);
+  //       setIsFileVisiblefile(false);
+  //       setisFileVisiblefileupload(true);
+  //       setisFileVisiblefilebutton(true);
+  //       setIsFileVisiblefile(false);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error picking file:", error);
+  //   }
+  // };
   const handleFilePick = async () => {
-    try {
-      const result = await DocumentPicker.pickSingle({
-        type: "*/*", // Accept all file types
-        copyToCacheDirectory: true,  // Optional, to copy to a temporary directory
-      });
+    Alert.alert(
+      "Select Option",
+      "Choose an option to upload the invoice",
+      [
+        {
+          text: "Choose from Gallery",
+          onPress: async () => {
+            try {
+              const result = await DocumentPicker.pickSingle({
+                type: "*/*", // Accept all file types
+                copyToCacheDirectory: true,
+              });
   
-      // Ensure the result contains the proper file details
-      const originalFileName = result.name;  // The name of the file picked
-      const originalFileUri = result.uri;    // The URI of the file
+              if (result) {
+                const originalFileName = result.name;
+                const originalFileUri = result.uri;
+                const fileExtension = originalFileName.split('.').pop();
+                const baseFileName = originalFileName.replace(`.${fileExtension}`, '');
+                const updatedFileName = `${baseFileName}_invoice.${fileExtension}`;
   
-      console.log(result, "originalFileUri");
-  
-      if (originalFileName) {
-        console.warn("Original File Name:", originalFileName);
-  
-        // Extract the file extension
-        const fileExtension = originalFileName.split('.').pop(); // Extract file extension
-        const baseFileName = originalFileName.replace(`.${fileExtension}`, ''); // Remove the extension
-        const updatedFileName = `${baseFileName}_invoice.${fileExtension}`; // Add "_invoice" to the base name
-  
-        setgetFileName(updatedFileName);  // Set the updated file name
-        setIsFileVisible(true);  // Show the selected file
-        setFileUri(originalFileUri);  // Store the URI for uploading
-  
-        setIsFileVisible(false);
-        setIsFileVisiblefile(false);
-        setisFileVisiblefileupload(true);
-        setisFileVisiblefilebutton(true);
-        setIsFileVisiblefile(false);
-      }
-    } catch (error) {
-      console.error("Error picking file:", error);
-    }
-  };
-  
+                setgetFileName(updatedFileName);
+                setFileUri(originalFileUri);
+                setIsFileVisible(false);
+                setIsFileVisiblefile(false);
+                setisFileVisiblefileupload(true);
+                setisFileVisiblefilebutton(true);
+                setIsFileVisiblefile(false);
+              }
+            } catch (error) {
+              console.error("Error picking file:", error);
+            }
+          }
+        },
+        {
+          text: "Open Camera",
+          onPress: () => {
+            launchCamera({ mediaType: 'photo', saveToPhotos: true }, (response) => {
+              if (!response.didCancel && !response.errorCode) {
+                const imageUri = response.assets[0].uri;
+                setFileUri(imageUri);
+                setIsFileVisible(true);
+              }
+            });
+          }
+        },
+        { text: "Cancel", style: "cancel" }
+      ]
+    );
+  }; 
   const submitInvoice = async () => {
     try {
       if(!invoiceNumber || !gstAmount ||!amountBeforeGST || !dob ){
@@ -558,7 +611,7 @@ const handleDelete = async () => {
     }
   };
   return (
-    <ScrollView>
+    <ScrollView> 
 
       <Header2/>
       <View  style={styles.MainContainer}>
