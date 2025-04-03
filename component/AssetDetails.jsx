@@ -29,10 +29,7 @@ const AssetDetails = () => {
           fetchAllGetData();
         }, []);
         const fetchAllGetData = async () => {
-         
-       
           setLoading(true);
-         
           try {
             const getData = await AsyncStorage.getItem("userInfo");
             const subid=JSON.parse(getData)

@@ -31,8 +31,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 
 
- const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
-  // const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
+//  const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
+    const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
 
 
 const ViewInvoice = () => {
@@ -103,8 +103,6 @@ const ViewInvoice = () => {
       };
   
       useEffect(() => {
-       
-
 
         const fetchData = async () => {
           const data = await AsyncStorage.getItem('projectData'); // Fetch stored data
@@ -300,7 +298,7 @@ const ViewInvoice = () => {
             text1: 'Download Complete',
             text2: `${fileName} saved to Downloads`,
             position: "center",
-            topOffset: Math.round(Dimensions.get("window").height / 2) - 100,
+            topOffset: Math.round(Dimensions.get("window").height / 3) - 100,
             onPress: () => openFile(downloadPath),
           });
         } else {
@@ -444,13 +442,26 @@ const handleDelete = async () => {
         {
           text: "Open Camera",
           onPress: () => {
-            launchCamera({ mediaType: 'photo', saveToPhotos: true }, (response) => {
-              if (!response.didCancel && !response.errorCode) {
-                const imageUri = response.assets[0].uri;
-                setFileUri(imageUri);
-                setIsFileVisible(true);
+            launchCamera(
+              { mediaType: 'photo', saveToPhotos: true }, 
+              (response) => {
+                if (!response.didCancel && !response.errorCode) {
+                  const imageAsset = response.assets[0]; // Get the first image asset
+                  const imageUri = imageAsset.uri;
+                  const originalFileName = imageAsset.fileName || `photo_${Date.now()}.jpg`; // Assign a filename if not available
+                  const fileExtension = originalFileName.split('.').pop();
+                  const baseFileName = originalFileName.replace(`.${fileExtension}`, '');
+                  const updatedFileName = `${baseFileName}_invoice.${fileExtension}`;
+  
+                  setgetFileName(updatedFileName);
+                  setFileUri(imageUri);
+                  setIsFileVisible(false);
+                  setIsFileVisiblefile(false);
+                  setisFileVisiblefileupload(true);
+                  setisFileVisiblefilebutton(true);
+                }
               }
-            });
+            );
           }
         },
         { text: "Cancel", style: "cancel" }
@@ -565,7 +576,23 @@ const handleDelete = async () => {
           name: getfilename, // File name
           type: fileType, // File MIME type
         });
-      } else {
+      } else if (imageURI.startsWith('file://')) {
+        const fileName = imageURI.split('/').pop();
+        console.log(fileName,"riju");
+        
+        const fileType = `image/${fileName.split('.').pop()}`;
+        console.log(fileType,"riju");
+        console.log(imageURI,"imageURI");
+        
+  
+        // Append file to FormData
+        formData.append('FILE', {
+          uri: imageURI, // Local file URI
+          name: getfilename, // File name
+          type: fileType, // File MIME type
+        });
+        // Your code here
+    } else {
         console.log("Processing non-local image URI");
   
         // Fetch blob for non-local URIs
@@ -740,12 +767,15 @@ const handleDelete = async () => {
       
       </View>
       )}
-      <View style={{ flexDirection: 'row' }}> 
+      <View style={{ flexDirection: 'row', gap:30 }}> 
         {isFileVisible && (
        <TouchableOpacity onPress={() => handleDownload()}>
                            <AntDesign name="download" size={20} color="#4d8f91" style={styles.Icon} />
                          </TouchableOpacity>
         )}
+        <TouchableOpacity onPress={()=>handleDelete()}>
+        <AntDesign name="delete" size={20} color="red" style={styles.IconDelete} />
+        </TouchableOpacity>
        
           </View>
           {isFileVisible && (
