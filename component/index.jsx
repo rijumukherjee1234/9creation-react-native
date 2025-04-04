@@ -70,7 +70,7 @@ const Login = () => {
 
     try {
         const response = await axios.post(
-            'https://dev-ninecreationapi.devxportal.com/api/sub-contractor/api-login', {
+            'https://erpapi.9creation.com.sg/api/sub-contractor/api-login', {
               USER_NAME: username,
             PASSWORD: password,
         });
