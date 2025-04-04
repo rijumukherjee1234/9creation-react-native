@@ -6,7 +6,6 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import Icon from "react-native-vector-icons/MaterialIcons";
-// import { useNavigation } from 'expo-router';
 import axios from "axios";
   import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from '@react-navigation/native';

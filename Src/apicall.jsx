@@ -1,8 +1,8 @@
 // apiConfig.js
-  //const API_URL = "https://dev-ninecreationapi.devxportal.com";
+    // const API_URL = "https://dev-ninecreationapi.devxportal.com";
 // https://erpapi.9creation.com.sg // Assuming you have .env configured
 //  console.log(API_URL,"56")
-  const API_URL = "https://erpapi.9creation.com.sg"
+    const API_URL = "https://erpapi.9creation.com.sg"
 export const API_ENDPOINTS = {
    
     subcontractor_task_list: `${API_URL}/api/WebApi/api-get-view-sub-contractor-task-list`, 

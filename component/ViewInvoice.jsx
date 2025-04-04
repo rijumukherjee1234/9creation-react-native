@@ -1,5 +1,5 @@
 
-import { View, Text, ScrollView,StyleSheet,ActivityIndicator , PermissionsAndroid, Alert, Linking,Platform,TextInput,TouchableOpacity,Animated } from 'react-native'
+import { View, Text, ScrollView,StyleSheet,ActivityIndicator , PermissionsAndroid, Alert, Linking,Platform,TextInput,TouchableOpacity,Animated,Dimensions } from 'react-native'
 import React, { useRef,useState,useEffect } from 'react';
  import {
      responsiveFontSize,
@@ -11,6 +11,7 @@ import React, { useRef,useState,useEffect } from 'react';
 
   // import  manageExternalStorage  from 'react-native-manage-external-storage';
   import FileViewer from 'react-native-file-viewer';
+  import Toast from 'react-native-toast-message';
 // //   import * as FileSystem from 'expo-file-system'; 
   import { useNavigation, useRoute } from '@react-navigation/native';
   import RNFetchBlob from 'rn-fetch-blob'
@@ -22,6 +23,7 @@ import React, { useRef,useState,useEffect } from 'react';
    import RNFS from 'react-native-fs';
   
    import DocumentPicker from 'react-native-document-picker';
+   import { launchCamera } from 'react-native-image-picker';
    import { request, PERMISSIONS,RESULTS  } from 'react-native-permissions';
 //   import Toast from 'react-native-toast-message';
 //   // import axios from 'axios';
@@ -29,8 +31,13 @@ import React, { useRef,useState,useEffect } from 'react';
 import Header2 from '../Src/Header';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Share from 'react-native-share';
- //const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
- const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
+ const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
+//  const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
+
+
+
+//  const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
+    // const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
 
 
 const ViewInvoice = () => {
@@ -56,6 +63,7 @@ const ViewInvoice = () => {
     const [isFileVisiblefile, setIsFileVisiblefile] = useState(false);
     const [isFileVisiblefileupload, setisFileVisiblefileupload] = useState(false);
     const [isFileVisiblefilebutton, setisFileVisiblefilebutton] = useState(false);
+    const [fileName, setFileName] = useState('');
     
     const [amountBeforeGST, setAmountBeforeGST] = useState('');
     const [gstAmount, setGstAmount] = useState('');
@@ -100,8 +108,6 @@ const ViewInvoice = () => {
       };
   
       useEffect(() => {
-       
-
 
         const fetchData = async () => {
           const data = await AsyncStorage.getItem('projectData'); // Fetch stored data
@@ -232,27 +238,8 @@ const ViewInvoice = () => {
         }
         return 'https://path-to-default-image.com/default-image.jpg'; // Default image URL
       };
-      
-    //   import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-
-   
 
 
-
-
-
-    // import { PermissionsAndroid, Alert, Linking, Platform } from 'react-native';
-
-   
-
-   
-
-    
-
-    // import { Alert, Platform, PermissionsAndroid } from 'react-native';
-    // import RNFS from 'react-native-fs';
-    // import RNFetchBlob from 'rn-fetch-blob';
-    
     const requestStoragePermission = async () => {
       if (Platform.OS === 'android' && Platform.Version < 29) { // Android 10 and below
         try {
@@ -389,6 +376,41 @@ const handleDelete = async () => {
     }
   };
   
+  // const handleFilePick = async () => {
+  //   try {
+  //     const result = await DocumentPicker.pickSingle({
+  //       type: "*/*", // Accept all file types
+  //       copyToCacheDirectory: true,  // Optional, to copy to a temporary directory
+  //     });
+  
+  //     // Ensure the result contains the proper file details
+  //     const originalFileName = result.name;  // The name of the file picked
+  //     const originalFileUri = result.uri;    // The URI of the file
+  
+  //     console.log(result, "originalFileUri");
+  
+  //     if (originalFileName) {
+  //       console.warn("Original File Name:", originalFileName);
+  
+  //       // Extract the file extension
+  //       const fileExtension = originalFileName.split('.').pop(); // Extract file extension
+  //       const baseFileName = originalFileName.replace(`.${fileExtension}`, ''); // Remove the extension
+  //       const updatedFileName = `${baseFileName}_invoice.${fileExtension}`; // Add "_invoice" to the base name
+  
+  //       setgetFileName(updatedFileName);  // Set the updated file name
+  //       setIsFileVisible(true);  // Show the selected file
+  //       setFileUri(originalFileUri);  // Store the URI for uploading
+  
+  //       setIsFileVisible(false);
+  //       setIsFileVisiblefile(false);
+  //       setisFileVisiblefileupload(true);
+  //       setisFileVisiblefilebutton(true);
+  //       setIsFileVisiblefile(false);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error picking file:", error);
+  //   }
+  // };
   const handleFilePick = async () => {
   
     try {
@@ -419,31 +441,48 @@ const handleDelete = async () => {
       const originalFileName = result.name;  // The name of the file picked
       const originalFileUri = result.uri;    // The URI of the file
   
-      console.log(result, "originalFileUri");
+                setgetFileName(updatedFileName);
+                setFileUri(originalFileUri);
+                setIsFileVisible(false);
+                setIsFileVisiblefile(false);
+                setisFileVisiblefileupload(true);
+                setisFileVisiblefilebutton(true);
+                setIsFileVisiblefile(false);
+              }
+            } catch (error) {
+              console.error("Error picking file:", error);
+            }
+          }
+        },
+        {
+          text: "Open Camera",
+          onPress: () => {
+            launchCamera(
+              { mediaType: 'photo', saveToPhotos: true }, 
+              (response) => {
+                if (!response.didCancel && !response.errorCode) {
+                  const imageAsset = response.assets[0]; // Get the first image asset
+                  const imageUri = imageAsset.uri;
+                  const originalFileName = imageAsset.fileName || `photo_${Date.now()}.jpg`; // Assign a filename if not available
+                  const fileExtension = originalFileName.split('.').pop();
+                  const baseFileName = originalFileName.replace(`.${fileExtension}`, '');
+                  const updatedFileName = `${baseFileName}_invoice.${fileExtension}`;
   
-      if (originalFileName) {
-        console.warn("Original File Name:", originalFileName);
-  
-        // Extract the file extension
-        const fileExtension = originalFileName.split('.').pop(); // Extract file extension
-        const baseFileName = originalFileName.replace(`.${fileExtension}`, ''); // Remove the extension
-        const updatedFileName = `${baseFileName}_invoice.${fileExtension}`; // Add "_invoice" to the base name
-  
-        setgetFileName(updatedFileName);  // Set the updated file name
-        setIsFileVisible(true);  // Show the selected file
-        setFileUri(originalFileUri);  // Store the URI for uploading
-  
-        setIsFileVisible(false);
-        setIsFileVisiblefile(false);
-        setisFileVisiblefileupload(true);
-        setisFileVisiblefilebutton(true);
-        setIsFileVisiblefile(false);
-      }
-    } catch (error) {
-      console.error("Error picking file:", error);
-    }
-  };
-  
+                  setgetFileName(updatedFileName);
+                  setFileUri(imageUri);
+                  setIsFileVisible(false);
+                  setIsFileVisiblefile(false);
+                  setisFileVisiblefileupload(true);
+                  setisFileVisiblefilebutton(true);
+                }
+              }
+            );
+          }
+        },
+        { text: "Cancel", style: "cancel" }
+      ]
+    );
+  }; 
   const submitInvoice = async () => {
     try {
       if(!invoiceNumber || !gstAmount ||!amountBeforeGST || !dob ){
@@ -615,7 +654,7 @@ const handleDelete = async () => {
     }
   };
   return (
-    <ScrollView>
+    <ScrollView> 
 
       <Header2/>
       <View  style={styles.MainContainer}>
@@ -744,17 +783,16 @@ const handleDelete = async () => {
       
       </View>
       )}
-      <View style={{ flexDirection: 'row' }}> 
+      <View style={{ flexDirection: 'row', gap:30 }}> 
         {isFileVisible && (
        <TouchableOpacity onPress={() => handleDownload()}>
                            <AntDesign name="download" size={20} color="#4d8f91" style={styles.Icon} />
                          </TouchableOpacity>
         )}
-        {isFileVisible && (
-                         <TouchableOpacity onPress={() => handleDelete()}>
-      <AntDesign name="delete" size={20} color="#ff0000" style={styles.IconDelete} />
-</TouchableOpacity>
-          )}
+        <TouchableOpacity onPress={()=>handleDelete()}>
+        <AntDesign name="delete" size={20} color="red" style={styles.IconDelete} />
+        </TouchableOpacity>
+       
           </View>
           {isFileVisible && (
       <Text style={styles.textone}>Upload Date and Time :{getuploaddatetime} </Text>
@@ -773,6 +811,7 @@ const handleDelete = async () => {
      </View>
             )}
       </View>
+      <Toast />
     </ScrollView>
   )
 }
