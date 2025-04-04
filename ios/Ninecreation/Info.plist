@@ -12,6 +12,13 @@
 	<string>We need access to your documents to upload files.</string>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+<string>We need access to your camera to take photos.</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>We need access to your photo library to save images.</string>
+<key>NSPhotoLibraryAddUsageDescription</key>
+<string>We need to save photos to your photo library.</string>
+
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

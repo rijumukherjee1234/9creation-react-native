@@ -11,6 +11,7 @@ import React, { useRef,useState,useEffect } from 'react';
 
   // import  manageExternalStorage  from 'react-native-manage-external-storage';
   import FileViewer from 'react-native-file-viewer';
+  import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 // //   import * as FileSystem from 'expo-file-system'; 
   import { useNavigation, useRoute } from '@react-navigation/native';
   import RNFetchBlob from 'rn-fetch-blob'
@@ -29,8 +30,8 @@ import React, { useRef,useState,useEffect } from 'react';
 import Header2 from '../Src/Header';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Share from 'react-native-share';
- //const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
- const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
+ const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
+ //const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
 
 
 const ViewInvoice = () => {
@@ -41,6 +42,7 @@ const ViewInvoice = () => {
     const [invoiceNumber, setInvoiceNumber] = useState('');
     const [loading, setLoading] = useState(false); 
     const [projectNumber, setProjectNumber] = useState('');
+    const [fileType,setFileType]= useState('');
     const [selectedInfoNewstate, setSelectedInfoNewstate] = useState(null); 
     const [jobDescription, setJobDescription] = useState('');
     const [workdescription,setworkdescription]= useState('');
@@ -298,25 +300,57 @@ const ViewInvoice = () => {
         const res = await downloadResumable.promise;
         console.log('File downloaded to cache:', tempFileUri);
     
+        let finalFilePath = '';
+    
         if (Platform.OS === 'ios') {
           console.log("Saving file to Documents directory...");
           const documentsPath = `${RNFS.DocumentDirectoryPath}/${fileName}`;
     
+          // 🔍 Check if file already exists and delete it
+          const fileExists = await RNFS.exists(documentsPath);
+          if (fileExists) {
+            console.log('File already exists. Deleting before replacing...');
+            await RNFS.unlink(documentsPath);
+          }
+    
           await RNFS.moveFile(tempFileUri, documentsPath);
           console.log('File successfully saved to:', documentsPath);
+          finalFilePath = documentsPath;
     
-          Alert.alert('Success', 'Your file has been saved.');
+          Alert.alert(
+            'Success',
+            'Your file has been saved successfully.',
+            [
+              {
+                text: 'Open File',
+                onPress: () => FileViewer.open(finalFilePath)
+                  .then(() => console.log('File opened'))
+                  .catch(err => {
+                    console.error('Error opening file:', err);
+                    Alert.alert('Error', 'Cannot open this file.');
+                  }),
+              },
+              { text: 'OK', style: 'cancel' }
+            ]
+          );
     
-          // 📌 Open iOS Share Sheet to let user save it in "Files"
+          // 📤 Open iOS Share Sheet
           Share.open({
             url: `file://${documentsPath}`,
-            type: 'application/pdf', // Change the MIME type based on your file
-            saveToFiles: true, // Ensures "Save to Files" option appears
+            type: 'application/pdf', // or 'image/jpeg', etc.
+            saveToFiles: true,
           });
     
         } else if (Platform.OS === 'android') {
           console.log("Saving file to Downloads folder...");
           const downloadPath = `${RNFS.DownloadDirectoryPath}/${fileName}`;
+    
+          const fileExists = await RNFS.exists(downloadPath);
+          if (fileExists) {
+            console.log('File already exists. Deleting before replacing...');
+            await RNFS.unlink(downloadPath);
+          }
+    
           await RNFS.moveFile(tempFileUri, downloadPath);
           console.log('File successfully saved to:', downloadPath);
     
@@ -327,6 +361,7 @@ const ViewInvoice = () => {
         Alert.alert('Download Error', 'An error occurred while downloading the file.');
       }
     };
+    
     
     
     
@@ -388,59 +423,106 @@ const handleDelete = async () => {
       Alert.alert("Error", "Failed to delete the invoice. Please try again.");
     }
   };
+  const handleCamera = async () => {
+   
+    const options = {
+      mediaType: "photo",
+      quality: 1,
+    };
+    launchCamera(options, (response) => {
+      if (response.didCancel) {
+        console.warn("User cancelled image picker");
+      } else if (response.errorMessage) {
+        console.error("Camera Error: ", response.errorMessage);
+      } else {
+        const file = response.assets[0];
+        processFile(file);
+      }
+    });
+  };
   
   const handleFilePick = async () => {
+    Alert.alert("Select Option", "Choose an action", [
+      {
+        text: "Camera",
+        onPress: () => handleCamera(),
+      },
   
+      {
+        text: "Document",
+        onPress: () => handleDocumentPick(),
+      },
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+    ]);
+  };
+  const handleGallery = async () => {
+    const options = {
+      mediaType: "photo",
+      quality: 1,
+    };
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.warn("User cancelled image picker");
+      } else if (response.errorMessage) {
+        console.error("Gallery Error: ", response.errorMessage);
+      } else {
+        const file = response.assets[0];
+        processFile(file);
+      }
+    });
+  };
+  const handleDocumentPick = async () => {
     try {
-      let result;
-    //condition handle ios/android
-    if (Platform.OS === 'ios') {
-       result = await DocumentPicker.pickSingle({
+      const result = await DocumentPicker.pickSingle({
         type: [
-        "public.item", 
-        "public.content", 
-        "public.data", 
-        "application/pdf", 
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
-        "application/vnd.ms-excel", 
-        "image/*",
-        "text/plain"
-      ], // Accept all file types
-        copyToCacheDirectory: true,  // Optional, to copy to a temporary directory
-      });
-    }
-    else if(Platform.OS === 'android'){
-       result = await DocumentPicker.pickSingle({
-        type: "*/*", // Accept all file types
+          "public.item",
+          "public.content",
+          "public.data",
+          "application/pdf",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "application/vnd.ms-excel",
+          "image/*",
+          "text/plain",
+        ],
         copyToCacheDirectory: true,
       });
-    }
-      // Ensure the result contains the proper file details
-      const originalFileName = result.name;  // The name of the file picked
-      const originalFileUri = result.uri;    // The URI of the file
   
-      console.log(result, "originalFileUri");
-  
-      if (originalFileName) {
-        console.warn("Original File Name:", originalFileName);
-  
-        // Extract the file extension
-        const fileExtension = originalFileName.split('.').pop(); // Extract file extension
-        const baseFileName = originalFileName.replace(`.${fileExtension}`, ''); // Remove the extension
-        const updatedFileName = `${baseFileName}_invoice.${fileExtension}`; // Add "_invoice" to the base name
-  
-        setgetFileName(updatedFileName);  // Set the updated file name
-        setIsFileVisible(true);  // Show the selected file
-        setFileUri(originalFileUri);  // Store the URI for uploading
-  
-        setIsFileVisible(false);
-        setIsFileVisiblefile(false);
-        setisFileVisiblefileupload(true);
-        setisFileVisiblefilebutton(true);
-        setIsFileVisiblefile(false);
-      }
+      processFile(result);
     } catch (error) {
-      console.error("Error picking file:", error);
+      if (DocumentPicker.isCancel(error)) {
+        console.warn("User cancelled document picker");
+      } else {
+        console.error("Error picking document:", error);
+      }
+    }
+  };
+  
+  // Function to process the selected file
+  const processFile = (file) => {
+    const originalFileName = file.fileName || file.name;
+    const originalFileUri = file.uri;
+    const originalFileType = file.type || file.mimeType;
+  
+    console.log("Selected File:", file);
+  
+    if (originalFileName) {
+      const fileExtension = originalFileName.split(".").pop();
+      const baseFileName = originalFileName.replace(`.${fileExtension}`, "").replace(/\s+/g, "_");
+      const updatedFileName = `${baseFileName}_invoice.${fileExtension}`;
+  
+      setgetFileName(updatedFileName);
+      setFileUri(originalFileUri);
+      setFileType(originalFileType);
+  
+      // Show/hide UI elements accordingly
+      setIsFileVisible(false);
+      setIsFileVisiblefile(false);
+      setisFileVisiblefileupload(true);
+      setisFileVisiblefilebutton(true);
+      setIsFileVisiblefile(false);
     }
   };
   

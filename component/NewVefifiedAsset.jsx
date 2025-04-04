@@ -13,8 +13,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Share from 'react-native-share';
 // import * as FileSystem from 'expo-file-system';  // Import expo-file-system for downloading files
 // import * as DocumentPicker from "expo-document-picker";
-  // const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
-   const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
+  const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
+  //  const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
 
 
 const VerifiedAsset = () => {
@@ -158,10 +158,10 @@ result = await DocumentPicker.pickSingle({
     console.warn("Original File Name:", originalFileName);
     const originalFileUri = result.uri;
 
-    const fileExtension = originalFileName.split('.').pop();
-    const baseFileName = originalFileName.replace(`.${fileExtension}`, '');
-    const updatedFileName = `${baseFileName}_3dDrawing.${fileExtension}`;
-
+    const fileExtension = originalFileName.split('.').pop(); // Extract file extension
+    const baseFileName = originalFileName.replace(`.${fileExtension}`, '').replace(/\s+/g, ''); // Remove extension and spaces
+    const updatedFileName = `${baseFileName}_3dDrawing.${fileExtension}`; // Add "_3dDrawing"
+    
     setgetFileName(updatedFileName); // Updating state for debugging
     setFileUri(originalFileUri); // Updating state for debugging
 
@@ -241,68 +241,77 @@ const uploadFile = async (imageURI,filename) => {
 
   // Handle the download of the file
   const handleDownload = async (photo) => {
-     console.log(photo.FILE_NAME,"photo");
-     
-     const fileUrl = encodeURI(generateImageUrl(photo.FILE_NAME)); // Ensure URL is encoded
-     const fileName = photo.FILE_NAME;
-    console.log(fileUrl,fileUrl,"riju");
-    
-   
-     try {
-       console.log('Downloading file from:', fileUrl);
-   
-       // Step 1: Download the file to the cache directory
-       const tempFileUri = `${RNFS.CachesDirectoryPath}/${fileName}`;
-              console.log('Starting download from:', fileUrl);
-              console.log('Temp storage path:', tempFileUri);
-          
-              // Step 1: Download the file to cache directory
-              const downloadResumable = RNFS.downloadFile({
-                fromUrl: fileUrl,
-                toFile: tempFileUri,
-              });
-          
-              const res = await downloadResumable.promise;
-              console.log('File downloaded to cache:', tempFileUri);
-          
-              if (Platform.OS === 'android') {
-                if (Platform.Version < 29) {
-                  console.log("Checking storage permissions for Android 10 and below...");
-                  const hasPermission = await requestStoragePermission();
-                  if (!hasPermission) {
-                    Alert.alert('Permission Denied', 'Storage permission is required to save the file.');
-                    return;
-                  }
-                }
-          
-                console.log("Saving file to Downloads folder...");
-                const downloadPath = `${RNFS.DownloadDirectoryPath}/${fileName}`;
-          
-                // Android 10+ (API 29+) can use MediaStore API via RNFetchBlob
-                await RNFetchBlob.fs.cp(tempFileUri, downloadPath);
-                console.log('File successfully saved to:', downloadPath);
-          
-                Alert.alert('Download Complete', 'Your file has been successfully saved to the Downloads folder.');
-
-             
-              } else if(Platform.OS === 'ios') {
-                console.log("Saving file to Documents directory...");
-                const documentsPath = `${RNFS.DocumentDirectoryPath}/${fileName}`;
-                await RNFS.moveFile(tempFileUri, documentsPath);
-                console.log('File successfully saved to:', documentsPath);
-                Alert.alert('Success', 'Your file has been saved.');
-      // 📌 Open iOS Share Sheet to let user save it in "Files"
-      Share.open({
-     url: `file://${documentsPath}`,
-     type: 'application/pdf', // Change the MIME type based on your file
-     saveToFiles: true, // Ensures "Save to Files" option appears
-    });
-  }
-     } catch (error) {
-       console.log('Error saving file:', error);
-       Alert.alert('Error', 'Failed to save the file.');
-     }
-   };
+    console.log(photo.FILE_NAME, "photo");
+  
+    const fileUrl = encodeURI(generateImageUrl(photo.FILE_NAME));
+    const fileName = photo.FILE_NAME.replace(/\s+/g, ''); // Optional: remove spaces in file name
+    console.log(fileUrl, "riju");
+  
+    try {
+      console.log('Downloading file from:', fileUrl);
+  
+      const tempFileUri = `${RNFS.CachesDirectoryPath}/${fileName}`;
+      console.log('Temp storage path:', tempFileUri);
+  
+      const downloadResumable = RNFS.downloadFile({
+        fromUrl: fileUrl,
+        toFile: tempFileUri,
+      });
+  
+      const res = await downloadResumable.promise;
+      console.log('File downloaded to cache:', tempFileUri);
+  
+      if (Platform.OS === 'android') {
+        if (Platform.Version < 29) {
+          const hasPermission = await requestStoragePermission();
+          if (!hasPermission) {
+            Alert.alert('Permission Denied', 'Storage permission is required to save the file.');
+            return;
+          }
+        }
+  
+        const downloadPath = `${RNFS.DownloadDirectoryPath}/${fileName}`;
+  
+        // ✅ Check if file already exists and delete it
+        const exists = await RNFS.exists(downloadPath);
+        if (exists) {
+          await RNFS.unlink(downloadPath);
+          console.log('Existing file deleted:', downloadPath);
+        }
+  
+        await RNFetchBlob.fs.cp(tempFileUri, downloadPath);
+        console.log('File successfully saved to:', downloadPath);
+  
+        Alert.alert('Download Complete', 'Your file has been successfully saved to the Downloads folder.');
+  
+      } else if (Platform.OS === 'ios') {
+        const documentsPath = `${RNFS.DocumentDirectoryPath}/${fileName}`;
+  
+        // ✅ Check if file already exists and delete it
+        const exists = await RNFS.exists(documentsPath);
+        if (exists) {
+          await RNFS.unlink(documentsPath);
+          console.log('Existing file deleted:', documentsPath);
+        }
+  
+        await RNFS.moveFile(tempFileUri, documentsPath);
+        console.log('File successfully saved to:', documentsPath);
+  
+        Alert.alert('Success', 'Your file has been saved.');
+  
+        Share.open({
+          url: `file://${documentsPath}`,
+          type: 'application/pdf',
+          saveToFiles: true,
+        });
+      }
+  
+    } catch (error) {
+      console.log('Error saving file:', error);
+      Alert.alert('Error', 'Failed to save the file.');
+    }
+  };
+  
   
   // Helper function for MIME type
   const getMimeType = (fileName) => {
