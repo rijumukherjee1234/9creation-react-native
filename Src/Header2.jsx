@@ -30,7 +30,7 @@ useEffect(()=>{
       navigation.navigate('Profilepage')
           }
   return (
-   <View style={{marginTop:responsiveHeight(-0.5)}}>
+   <View style={{marginTop:responsiveHeight(2.5)}}>
           <View style={styles.container}>
             <View style={{flexDirection:'row',marginTop:responsiveHeight(2)}}>
                <TouchableOpacity onPress={() => navigation.navigate('Home')}>
@@ -83,7 +83,7 @@ marginTop:responsiveHeight(2),
 marginLeft: responsiveWidth(6),
 },
 headertext:{
-marginTop:responsiveHeight(1.8),
+marginTop:responsiveHeight(2),
 marginLeft:responsiveWidth(1),
 fontWeight:'600',
 fontSize:responsiveFontSize(1.8)
