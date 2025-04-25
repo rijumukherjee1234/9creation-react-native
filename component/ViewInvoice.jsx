@@ -31,8 +31,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 
 
-//  const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
-    const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
+ const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
+    // const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
 
 
 const ViewInvoice = () => {
@@ -46,7 +46,9 @@ const ViewInvoice = () => {
     const [selectedInfoNewstate, setSelectedInfoNewstate] = useState(null); 
     const [jobDescription, setJobDescription] = useState('');
     const [workdescription,setworkdescription]= useState('');
+    const [subworkdescription,setsubworkdescription]= useState('');
     const [retrievedDate ,handleDataRetrieval]= useState('');
+    const [ButtonNameChange,setButtonNameChange]= useState('');
     const [dob, setDob] = useState('');
     const [apiDob, setApiDob] = useState('');
     const [fileUri, setFileUri] = useState('');
@@ -114,11 +116,12 @@ const ViewInvoice = () => {
           console.log(parsedData,"parsedData");
           setProjectNumber(parsedData?.PROJECT_NO)
           setworkdescription(parsedData?.WORK_CATEGORY_VALUE)
+          setsubworkdescription(parsedData?.TYPE)
           setSubContractor(subcontractor_name.CompanyName)
           try {
             const data = await AsyncStorage.getItem('projectData'); // Fetch stored data
             const selectedInfoNew = data ? JSON.parse(data) : null; // Parse if data exists
-      
+            setButtonNameChange(selectedInfoNew.SUB_DETAILS[0].DELETE_FLAG)
             // Check if PURCHASEORDER_SYSID exists and is not null
             if (selectedInfoNew?.PURCHASE_ORDER_SYS_ID) {
            
@@ -468,6 +471,34 @@ const handleDelete = async () => {
       ]
     );
   }; 
+  const Handleibtn = async () => {
+    try {
+      const fileName = getapifilename;
+      if (!fileName) {
+        Alert.alert('Error', 'No file name available.');
+        return;
+      }
+  
+      const fileUrl = encodeURI(generateImageUrl(fileName));
+      const tempFilePath = `${RNFS.CachesDirectoryPath}/${fileName}`;
+      console.log('Previewing file from:', fileUrl);
+  
+    
+      const downloadResumable = RNFS.downloadFile({
+        fromUrl: fileUrl,
+        toFile: tempFilePath,
+      });
+  
+      await downloadResumable.promise;
+  
+    
+      await FileViewer.open(tempFilePath);
+    } catch (error) {
+      console.error('Error previewing file:', error);
+      Alert.alert('Preview Error', 'Cannot preview the file.');
+    }
+  };
+  
   const submitInvoice = async () => {
     try {
       if(!invoiceNumber || !gstAmount ||!amountBeforeGST || !dob ){
@@ -499,6 +530,7 @@ const handleDelete = async () => {
         INVOICE_DATE: apiDob,
         UNIT_TOTAL: amountBeforeGST,
         TAX_TOTAL: gstAmount,
+        WORK_DESCRIPTION_TYPE:subworkdescription,
         SUPPLIER_SYS_ID: subid.UserId,
         SUPPLIER_NAME: subContractor,
         PURCHASE_ORDER_SYS_ID: selectedInfoNewstate?.PURCHASE_ORDER_SYS_ID ||"0",
@@ -752,9 +784,12 @@ const handleDelete = async () => {
         <Text style={styles.textoneTotal}>Total Amount</Text>
         <Text style={styles.sidetxt}>S$ {totalAmount}</Text>
       </View>
+      <View style={{flexDirection:'row',gap:10}}>
       <TouchableOpacity style={styles.btn} onPress={handleFilePick}>
         <Text style={styles.btntxt}>Upload Invoice</Text>
       </TouchableOpacity>
+      </View>
+
       {isFileVisiblefile && (
       <View style={{ flexDirection: 'row' }}>
         <Text style={styles.textone}>File Name : {getapifilename}</Text>
@@ -767,32 +802,38 @@ const handleDelete = async () => {
       
       </View>
       )}
-      <View style={{ flexDirection: 'row', gap:30 }}> 
+      <View style={{ flexDirection: 'row', gap:20 }}> 
+      {isFileVisiblefile && (
+      <TouchableOpacity onPress={Handleibtn}>
+      <AntDesign name="eyeo" size={25} color="#0066ff" style={styles.ibtn}/>
+      </TouchableOpacity>
+      )}
         {isFileVisible && (
        <TouchableOpacity onPress={() => handleDownload()}>
                            <AntDesign name="download" size={20} color="#4d8f91" style={styles.Icon} />
                          </TouchableOpacity>
         )}
+         {isFileVisible && (
         <TouchableOpacity onPress={()=>handleDelete()}>
         <AntDesign name="delete" size={20} color="red" style={styles.IconDelete} />
         </TouchableOpacity>
-       
+         )}
           </View>
           {isFileVisible && (
       <Text style={styles.textone}>Upload Date and Time :{getuploaddatetime} </Text>
             )} 
               {isFileVisiblefilebutton && (
-                <View style={{ flexDirection: 'row' }}>
-       <TouchableOpacity style={styles.submitbtn} onPress={submitInvoice}>
-       
-       
-       {isLoading ? (
-         <ActivityIndicator size="small" color="#fff" /> // Show loading spinner while submitting
-       ) : (
-         <Text style={styles.submitbtntxt}>Submit</Text> // Show Submit button when not loading
-       )}
-     </TouchableOpacity>
-     </View>
+              <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity style={styles.submitbtn} onPress={submitInvoice}>
+                {isLoading ? (
+                  <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                  <Text style={styles.submitbtntxt}>
+                    {ButtonNameChange === '1' ? 'Resubmit' : 'Submit'}
+                  </Text>
+                )}
+              </TouchableOpacity>
+            </View>
             )}
       </View>
       <Toast />
@@ -876,7 +917,6 @@ const styles = StyleSheet.create({
           marginLeft: responsiveWidth(4),
           marginTop: responsiveHeight(1),
           fontSize: responsiveFontSize(1.5),
-          width:responsiveWidth(90)
         },
         textoneTotal:{
           color: '#000',
@@ -928,11 +968,11 @@ const styles = StyleSheet.create({
         },
         Icon:{
           paddingTop:responsiveHeight(2),
-          marginLeft:responsiveWidth(10)
+          marginLeft:responsiveWidth(30)
         },
         IconDelete:{
           paddingTop:responsiveHeight(2),
-          marginLeft:responsiveWidth(70)
+          marginLeft:responsiveWidth(30)
         },
   
         Inputtxt: {
@@ -951,6 +991,10 @@ const styles = StyleSheet.create({
           marginTop: responsiveHeight(1),
           borderRadius:responsiveWidth(2),
           paddingLeft:responsiveWidth(2),
+        },
+        ibtn:{
+          marginTop:responsiveHeight(2),
+          marginLeft: responsiveWidth(10),
         }
   
   })

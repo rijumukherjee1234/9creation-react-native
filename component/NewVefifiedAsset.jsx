@@ -12,8 +12,8 @@ import RNFS from 'react-native-fs';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 // import * as FileSystem from 'expo-file-system';  // Import expo-file-system for downloading files
 // import * as DocumentPicker from "expo-document-picker";
-  // const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
-   const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
+    const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
+    // const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
 
 
 const VerifiedAsset = () => {
@@ -42,11 +42,19 @@ const VerifiedAsset = () => {
       const response = await axios.get(API_ENDPOINTS.file_upload_get, {
         headers: { Authorization: `Bearer ${token}` },
         params: {
+
+
+
+          
           ITEM: 'SPECIFIC',
           REFERENCE_SYS_ID: projectData[0].PROJECT_SYS_ID,
           UPLOAD_FOR: '3D Drawing',
           MODULE: 'PROJECT_MANAGMENT',
+          WORK_DESCRIPTION_TYPE: projectData[0].TYPE
+
         },
+    
+        
       });
       setImageStore(response.data.response);
     } catch (err) {
@@ -107,6 +115,7 @@ const prepareJsonPayload = async (updatedFileName) => {
         UPLOAD_FOR: "3D Drawing",
         FILE_NAME: updatedFileName,
         MODULE: "PROJECT_MANAGMENT",
+        WORK_DESCRIPTION_TYPE: projectData[0].TYPE
       },
     ],
   };
@@ -152,7 +161,7 @@ const handleFilePick = async () => {
 
     // Await the payload preparation to ensure it's fully created before using it
     const jsonPayload = await prepareJsonPayload(updatedFileName);
-
+    console.warn(prepareJsonPayload,"prepareJsonPayload");
     if (!jsonPayload) {
       alert("Failed to prepare the payload.");
       return;
