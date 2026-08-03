@@ -1,0 +1,44 @@
+diff --git a/node_modules/@react-native/codegen/lib/parsers/typescript/components/componentsUtils.js b/node_modules/@react-native/codegen/lib/parsers/typescript/components/componentsUtils.js
+index 3ba47fe..506f939 100644
+--- a/node_modules/@react-native/codegen/lib/parsers/typescript/components/componentsUtils.js
++++ b/node_modules/@react-native/codegen/lib/parsers/typescript/components/componentsUtils.js
+@@ -324,7 +324,12 @@ function getTypeAnnotationForArray(
+         type: 'FloatTypeAnnotation',
+       };
+     default:
+-      type;
++      if (['detents', 'sheetAllowedDetents', 'sheetInitialDetent'].includes(name)) {
++        return {
++          type: 'ArrayTypeAnnotation',
++          elementType: { type: 'StringTypeAnnotation' }
++        };
++      }
+       throw new Error(`Unknown prop type for "${name}": ${type}`);
+   }
+ }
+@@ -407,6 +412,25 @@ function getTypeAnnotation(
+         `Cannot use "${type}" type annotation for "${name}": must use a specific function type like BubblingEventHandler, or DirectEventHandler`,
+       );
+     default:
++      const problematicProps = [
++        'accessibilityContainerViewIsModal',
++        'isOpen',
++        'active',
++        'focused',
++        'prefersGrabberVisible',
++        'sheetAllowedDetents',
++        'sheetLargestUndimmedDetent',
++        'sheetGrabberVisible',
++        'sheetCornerRadius',
++        'sheetExpandsWhenScrolledToEdge',
++        'sheetInitialDetent',
++        'sheetElevation',
++        'sheetShouldOverflowTopInset',
++        'sheetDefaultResizeAnimationEnabled'
++      ];
++      if (problematicProps.includes(name)) {
++        return { type: 'BooleanTypeAnnotation', default: false };
++      }
+       throw new Error(`Unknown prop type for "${name}": "${type}"`);
+   }
+ }

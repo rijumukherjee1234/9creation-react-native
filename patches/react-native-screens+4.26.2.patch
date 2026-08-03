@@ -1,0 +1,27 @@
+diff --git a/node_modules/react-native-screens/src/fabric/ModalScreenNativeComponent.ts b/node_modules/react-native-screens/src/fabric/ModalScreenNativeComponent.ts
+index 171e399..80fdf67 100644
+--- a/node_modules/react-native-screens/src/fabric/ModalScreenNativeComponent.ts
++++ b/node_modules/react-native-screens/src/fabric/ModalScreenNativeComponent.ts
+@@ -63,7 +63,7 @@ type ScrollEdgeEffect = 'automatic' | 'hard' | 'soft' | 'hidden';
+ 
+ type OptionalBoolean = 'undefined' | 'false' | 'true';
+ 
+-export interface NativeProps extends ViewProps {
++export interface NativeProps extends Omit<ViewProps, 'accessibilityContainerViewIsModal'> {
+   onAppear?: CT.DirectEventHandler<ScreenEvent> | undefined;
+   onDisappear?: CT.DirectEventHandler<ScreenEvent> | undefined;
+   onDismissed?: CT.DirectEventHandler<ScreenDismissedEvent> | undefined;
+diff --git a/node_modules/react-native-screens/src/fabric/ScreenNativeComponent.ts b/node_modules/react-native-screens/src/fabric/ScreenNativeComponent.ts
+index 4fa781c..50f1147 100644
+--- a/node_modules/react-native-screens/src/fabric/ScreenNativeComponent.ts
++++ b/node_modules/react-native-screens/src/fabric/ScreenNativeComponent.ts
+@@ -63,7 +63,8 @@ type ScrollEdgeEffect = 'automatic' | 'hard' | 'soft' | 'hidden';
+ 
+ type OptionalBoolean = 'undefined' | 'false' | 'true';
+ 
+-export interface NativeProps extends ViewProps {
++
++export interface NativeProps extends Omit<ViewProps, 'accessibilityContainerViewIsModal'> {
+   onAppear?: CT.DirectEventHandler<ScreenEvent> | undefined;
+   onDisappear?: CT.DirectEventHandler<ScreenEvent> | undefined;
+   onDismissed?: CT.DirectEventHandler<ScreenDismissedEvent> | undefined;

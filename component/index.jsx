@@ -70,7 +70,7 @@ const Login = () => {
 
     try {
         const response = await axios.post(
-            'https://dev-ninecreationapi.devxportal.com/api/sub-contractor/api-login', {
+            'https://uat-idapi.cssdemo.dev/api/sub-contractor/api-login', {
               USER_NAME: username,
             PASSWORD: password,
         });
@@ -108,9 +108,9 @@ const Login = () => {
   return (
     <View style={styles.MainContainer}>
         <Image
-          source={require("../assets/logo.jpg")}
+          source={require("../assets/logo10.jpg")}
           style={{
-            width: responsiveWidth(38),
+            width: responsiveWidth(79),
             height: responsiveHeight(18),
             alignSelf: "center",
             marginTop: responsiveHeight(7),

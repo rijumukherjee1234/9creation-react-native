@@ -40,7 +40,7 @@ navigation.navigate('Profilepage')
          <TouchableOpacity onPress={handleprees}>
           <View style={styles.boxView}>
           <Image
-          source={require("../assets/logo.jpg")}
+          source={require("../assets/logo10.jpg")}
           style={{
             width: responsiveWidth(10),
             height: responsiveHeight(5),

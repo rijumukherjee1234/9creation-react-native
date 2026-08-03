@@ -149,7 +149,7 @@ const Terms = () => {
     <ScrollView scrollEnabled={!isSignaturePadActive}>
       <View style={styles.MainContainer}>
       <Image
-        source={require("../assets/logo.jpg")}
+        source={require("../assets/logo10.jpg")}
         style={{
           width: responsiveWidth(38),
           height: responsiveHeight(18),

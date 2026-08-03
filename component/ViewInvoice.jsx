@@ -31,7 +31,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 
 
- const imageUrl = 'https://dev-ninecreationapi.devxportal.com/public/uploaded_files';
+ const imageUrl = 'https://uat-idapi.cssdemo.dev/public/uploaded_files';
     // const imageUrl = 'https://erpapi.9creation.com.sg/public/uploaded_files';
 
 
@@ -725,7 +725,7 @@ const handleDelete = async () => {
 </TouchableOpacity>
 
         </View>
-           Display Calendar
+           {/* <Text>Display Calendar</Text> */}
            {showCalendar && (
          <Calendar
          onDayPress={handleDateSelect}
