@@ -77,9 +77,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.ninecreation.prod"
+    namespace "com.renoflow.prod"
     defaultConfig {
-        applicationId "com.ninecreation.prod"
+        applicationId "com.renoflow.prod"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 11

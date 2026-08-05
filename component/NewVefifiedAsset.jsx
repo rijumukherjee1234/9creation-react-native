@@ -95,7 +95,7 @@ const handleDelete = async (photo) => {
 };
 // Updated prepareJsonPayload function
 const prepareJsonPayload = async (updatedFileName) => {
-  const getData = await AsyncStorage.getItem("userInfo");
+   const getData = await AsyncStorage.getItem("userInfo");
 
   if (!getData) {
     console.error("No user data found in AsyncStorage");
@@ -107,7 +107,7 @@ const prepareJsonPayload = async (updatedFileName) => {
 
   return {
     ITEM: "ADD_UPDATE_DRAWING",
-    CREATED_BY: "1",
+    CREATED_BY: subid.UserId,
     DETAILS: [
       {
         FILE_SYS_ID: "0",
