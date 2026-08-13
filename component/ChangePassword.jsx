@@ -185,7 +185,8 @@ marginTop:responsiveHeight(4)
     fontSize: responsiveFontSize(2),
     width: responsiveWidth(90),
     alignSelf: 'center',
-    paddingLeft:responsiveWidth(4)
+    paddingLeft:responsiveWidth(4),
+    color:'#000'
   },
   passwordContainer: {
     position: 'relative',

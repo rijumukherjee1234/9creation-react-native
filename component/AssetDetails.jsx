@@ -240,11 +240,13 @@ const styles = StyleSheet.create({
   },
   lebelHeadingtxtmain:{
     fontSize: responsiveFontSize(1.5),
-    paddingLeft:responsiveWidth(2)
+    paddingLeft:responsiveWidth(2),
+    color:'#000'
   },
   lebelgtxt: {
     fontSize: responsiveFontSize(1.5),
     paddingLeft:responsiveWidth(15),
+    color:'#000'
   },
   lebelgtxtside: {
     fontSize: responsiveFontSize(1.5),

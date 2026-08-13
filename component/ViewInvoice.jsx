@@ -190,6 +190,23 @@ const ViewInvoice = () => {
           console.error('Error retrieving taskInfo from AsyncStorage:', error);
         }
       };
+const generateUniqueFileName = (originalFileName, projectNo, baseOverride = null) => {
+  const fileExtension = originalFileName.split('.').pop();
+  let derivedBase = originalFileName.replace(`.${fileExtension}`, '');
+
+  // strip any previously appended suffixes so they don't stack on re-upload
+  derivedBase = derivedBase
+    .replace(/_invoice$/i, '')
+    .replace(/_3dDrawing$/i, '');
+
+  const baseFileName = baseOverride || derivedBase;
+
+  const timestamp = Date.now();
+  const randomPart = Math.floor(Math.random() * 900 + 100); // 3-digit random number
+  const uniqueId = `${timestamp}${randomPart}`;
+
+  return `${uniqueId}_${projectNo}_invoice.${fileExtension}`;
+};
       const formatUploadedDateTime = (dateTime) => {
         if (typeof dateTime !== 'string') {
           console.error('Invalid date format');
@@ -408,69 +425,70 @@ const handleDelete = async () => {
   //     console.error("Error picking file:", error);
   //   }
   // };
-  const handleFilePick = async () => {
-    Alert.alert(
-      "Select Option",
-      "Choose an option to upload the invoice",
-      [
-        {
-          text: "Choose from Gallery",
-          onPress: async () => {
-            try {
-              const result = await DocumentPicker.pickSingle({
-                type: "*/*", // Accept all file types
-                copyToCacheDirectory: true,
-              });
-  
-              if (result) {
-                const originalFileName = result.name;
-                const originalFileUri = result.uri;
-                const fileExtension = originalFileName.split('.').pop();
-                const baseFileName = originalFileName.replace(`.${fileExtension}`, '');
-                const updatedFileName = `${baseFileName}_invoice.${fileExtension}`;
-  
+const handleFilePick = async () => {
+  if (!projectNumber) {
+    Alert.alert("Error", "Project Number is required to upload invoice.");
+    return;
+  }
+
+  Alert.alert(
+    "Select Option",
+    "Choose an option to upload the invoice",
+    [
+      {
+        text: "Choose from Gallery",
+        onPress: async () => {
+          try {
+            const result = await DocumentPicker.pickSingle({
+              type: "*/*",
+              copyToCacheDirectory: true,
+            });
+
+            if (result) {
+              const originalFileName = result.name;
+              const originalFileUri = result.uri;
+              const updatedFileName = generateUniqueFileName(originalFileName, projectNumber);
+
+              setgetFileName(updatedFileName);
+              setFileUri(originalFileUri);
+              setIsFileVisible(false);
+              setIsFileVisiblefile(false);
+              setisFileVisiblefileupload(true);
+              setisFileVisiblefilebutton(true);
+              setIsFileVisiblefile(false);
+            }
+          } catch (error) {
+            console.error("Error picking file:", error);
+          }
+        }
+      },
+      {
+        text: "Open Camera",
+        onPress: () => {
+          launchCamera(
+            { mediaType: 'photo', saveToPhotos: true },
+            (response) => {
+              if (!response.didCancel && !response.errorCode) {
+                const imageAsset = response.assets[0];
+                const imageUri = imageAsset.uri;
+                const originalFileName = imageAsset.fileName || `photo_${Date.now()}.jpg`;
+                const updatedFileName = generateUniqueFileName(originalFileName, projectNumber, 'IMG');
+
                 setgetFileName(updatedFileName);
-                setFileUri(originalFileUri);
+                setFileUri(imageUri);
                 setIsFileVisible(false);
                 setIsFileVisiblefile(false);
                 setisFileVisiblefileupload(true);
                 setisFileVisiblefilebutton(true);
-                setIsFileVisiblefile(false);
               }
-            } catch (error) {
-              console.error("Error picking file:", error);
             }
-          }
-        },
-        {
-          text: "Open Camera",
-          onPress: () => {
-            launchCamera(
-              { mediaType: 'photo', saveToPhotos: true }, 
-              (response) => {
-                if (!response.didCancel && !response.errorCode) {
-                  const imageAsset = response.assets[0]; // Get the first image asset
-                  const imageUri = imageAsset.uri;
-                  const originalFileName = imageAsset.fileName || `photo_${Date.now()}.jpg`; // Assign a filename if not available
-                  const fileExtension = originalFileName.split('.').pop();
-                  const baseFileName = originalFileName.replace(`.${fileExtension}`, '');
-                  const updatedFileName = `${baseFileName}_invoice.${fileExtension}`;
-  
-                  setgetFileName(updatedFileName);
-                  setFileUri(imageUri);
-                  setIsFileVisible(false);
-                  setIsFileVisiblefile(false);
-                  setisFileVisiblefileupload(true);
-                  setisFileVisiblefilebutton(true);
-                }
-              }
-            );
-          }
-        },
-        { text: "Cancel", style: "cancel" }
-      ]
-    );
-  }; 
+          );
+        }
+      },
+      { text: "Cancel", style: "cancel" }
+    ]
+  );
+};
   const Handleibtn = async () => {
     try {
       const fileName = getapifilename;
@@ -745,7 +763,7 @@ const handleDelete = async () => {
         <View>
           <Text style={styles.inputtxt}>Amount Before GST<Text style={{color:'red'}}>*</Text></Text>
       <View style={{flexDirection:'row'}}>
-           <View style={styles.s$}><Text style={{fontSize:responsiveFontSize(2),fontWeight:'bold',paddingTop:responsiveHeight(0.2),paddingLeft:responsiveWidth(1)}}>S$</Text></View>
+           <View style={styles.s$}><Text style={{fontSize:responsiveFontSize(2),fontWeight:'bold',paddingTop:responsiveHeight(0.2),paddingLeft:responsiveWidth(1),color:'#000'}}>S$</Text></View>
           <TextInput
   style={styles.inputAmount}
   value={amountBeforeGST !== undefined && amountBeforeGST !== null ? `${amountBeforeGST}`.toString() : ''}
@@ -759,7 +777,7 @@ const handleDelete = async () => {
         <View >
           <Text style={styles.inputtxt}>GST Amount<Text style={{color:'red'}}>*</Text></Text>
           <View style={{flexDirection:'row'}}>
-          <View style={styles.s$}><Text style={{fontSize:responsiveFontSize(2),fontWeight:'bold',paddingTop:responsiveHeight(0.2),paddingLeft:responsiveWidth(1)}}>S$</Text></View>
+          <View style={styles.s$}><Text style={{fontSize:responsiveFontSize(2),fontWeight:'bold',paddingTop:responsiveHeight(0.2),paddingLeft:responsiveWidth(1),color:'#000'}}>S$</Text></View>
           <TextInput
   style={styles.inputAmount}
   value={gstAmount !== undefined && gstAmount !== null ? `${gstAmount}`.toString() : ''}
@@ -991,6 +1009,7 @@ const styles = StyleSheet.create({
           marginTop: responsiveHeight(1),
           borderRadius:responsiveWidth(2),
           paddingLeft:responsiveWidth(2),
+          color:'#000',
         },
         ibtn:{
           marginTop:responsiveHeight(2),

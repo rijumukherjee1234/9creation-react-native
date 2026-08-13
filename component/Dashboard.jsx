@@ -242,19 +242,23 @@ const styles = StyleSheet.create({
   lebelHeadingtxt: {
     fontSize: responsiveFontSize(1.5),
     paddingLeft: responsiveWidth(2),
+    color: '#000',
   },
   lebelHeadingtxtaddress: {
     fontSize: responsiveFontSize(1.5),
     paddingLeft: responsiveWidth(1),
     width: responsiveWidth(70),
+    color: '#000',
   },
   lebelHeadingtxtmain: {
     fontSize: responsiveFontSize(1.5),
     paddingLeft: responsiveWidth(2),
+    color:'#000'
   },
   lebelgtxt: {
     fontSize: responsiveFontSize(1.5),
     paddingLeft: responsiveWidth(15),
+    color:'#000'
   },
   box1:{
     borderWidth:1,

@@ -30,6 +30,8 @@ const Profile = () => {
         });
 
         if (response.data.status === 'true') {
+          
+          
           setProfileData(response.data.response[0]);
         } else {
           setError('Failed to load profile data.');
@@ -78,12 +80,12 @@ const Profile = () => {
       </View>
       <View style={styles.fieldContainer}>
         <View style={{ flexDirection: 'row', gap: 20 }}>
-          <AntDesign size={20} name='user' style={{ paddingVertical: responsiveHeight(2), paddingLeft: responsiveWidth(4) }} />
-          <TextInput style={styles.input} value={profileData.SUB_CONTRACTOR_NAME || ''} editable={false} placeholder='Sub Contractor Name' />
+          <AntDesign size={20} name='user' style={{ paddingVertical: responsiveHeight(2), paddingLeft: responsiveWidth(4), color: '#000' }} />
+          <TextInput style={styles.input22} value={profileData.COMPANY_NAME || ''} editable={false} />
         </View>
 
         <View style={{ flexDirection: 'row', gap: 20 }}>
-          <AntDesign size={20} name='phone' style={{ paddingVertical: responsiveHeight(2), paddingLeft: responsiveWidth(4) }} />
+          <AntDesign size={20} name='phone' style={{ paddingVertical: responsiveHeight(2), paddingLeft: responsiveWidth(4), color: '#000' }} />
           <TextInput
   style={styles.input}
   value={profileData.PHONE_NO ? profileData.PHONE_NO.toString() : ''}  // Ensuring it is a string
@@ -95,14 +97,14 @@ const Profile = () => {
         </View>
 
         <View style={{ flexDirection: 'row', gap: 20 }}>
-          <FontAwesome size={20} name='address-card' style={{ paddingVertical: responsiveHeight(2), paddingLeft: responsiveWidth(4) }} />
+          <FontAwesome size={20} name='address-card' style={{ paddingVertical: responsiveHeight(2), paddingLeft: responsiveWidth(4), color: '#000' }} />
           <TextInput style={styles.input} value={profileData.ADDRESS || ''} editable={false} placeholder='Address' />
         </View>
 
-        <View style={{ flexDirection: 'row', gap: 20 }}>
-          <AntDesign size={20} name='mail' style={{ paddingVertical: responsiveHeight(2), paddingLeft: responsiveWidth(4) }} />
-          <TextInput style={styles.input} value={profileData.EMAIL || ''} editable={false} placeholder='Email' />
-        </View>
+        {/* <View style={{ flexDirection: 'row', gap: 20 }}>
+          <AntDesign size={20} name='mail' style={{ paddingVertical: responsiveHeight(2), paddingLeft: responsiveWidth(4), color: '#000' }} />
+          <TextInput style={styles.input22} value={profileData.EMAIL || ''} editable={false} />
+        </View> */}
       </View>
       <View style={{ flexDirection: 'row', gap: 20, alignSelf: 'center' }}>
         <TouchableOpacity style={styles.LogOutbtn} onPress={handleLogout}>
@@ -125,7 +127,8 @@ const styles = StyleSheet.create({
   headingtxt: {
     fontSize: responsiveFontSize(3.5),
     marginLeft: responsiveWidth(3),
-    marginTop: responsiveHeight(2)
+    marginTop: responsiveHeight(2),
+    color: '#000',
   },
   fieldContainer: {
     paddingHorizontal: responsiveWidth(3),
@@ -141,6 +144,14 @@ const styles = StyleSheet.create({
     color: '#000',
     fontWeight: 'bold'
   },
+  input22: {
+  borderBottomWidth: 1,
+    borderColor: '#d1d1d1',
+    fontSize: responsiveFontSize(2),
+    paddingVertical: responsiveHeight(1),
+    color: '#000',
+    fontWeight: 'bold'
+},
   centered: {
     flex: 1,
     justifyContent: 'center',

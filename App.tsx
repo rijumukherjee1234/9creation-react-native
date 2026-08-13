@@ -27,6 +27,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { ThemeProvider } from './Theme/ThemeContext';
 import Login from './component';
 import Dashboard from './component/Dashboard';
 import Terms from './component/Terms';
@@ -72,15 +73,12 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 }
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  
 
   return (
+    <ThemeProvider> 
     <NavigationContainer>
-    <Stack.Navigator initialRouteName="Home" screenOptions={{ cardStyle: { backgroundColor: '#fff' },headerShown:false }}>
+    <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown:false }}>
        <Stack.Screen name="Home" component={Login} />
        <Stack.Screen name='Dashboardpage' component={Dashboard} />
        <Stack.Screen name='Terms' component={Terms}/>
@@ -94,6 +92,7 @@ function App(): React.JSX.Element {
        <Stack.Screen name='ViewInvoicepage' component={ViewInvoice}/>
     </Stack.Navigator>
   </NavigationContainer>
+  </ThemeProvider>
   );
 }
 

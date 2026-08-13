@@ -40,12 +40,13 @@ navigation.navigate('Profilepage')
          <TouchableOpacity onPress={handleprees}>
           <View style={styles.boxView}>
           <Image
-          source={require("../assets/logo10.jpg")}
+          source={require("../assets/css-logo.png")}
           style={{
-            width: responsiveWidth(10),
+            width: responsiveWidth(20),
             height: responsiveHeight(5),
             marginTop:responsiveHeight(1.8),
-            marginLeft:responsiveWidth(5)
+            //  marginRight:responsiveWidth(5),
+             marginLeft:responsiveWidth(-5)
           }}
         />
         
@@ -85,6 +86,7 @@ headertext:{
   marginTop:responsiveHeight(1.8),
   marginLeft:responsiveWidth(1),
   fontWeight:'600',
-  fontSize:responsiveFontSize(1.8)
+  fontSize:responsiveFontSize(1.8),
+  color: '#000'
   }
 })

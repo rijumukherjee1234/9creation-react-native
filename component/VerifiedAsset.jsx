@@ -10,6 +10,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import DocumentPicker from 'react-native-document-picker';
 import RNFetchBlob from 'rn-fetch-blob'
 import RNFS from 'react-native-fs';
+import moment from 'moment';
 import { request, PERMISSIONS,RESULTS  } from 'react-native-permissions';
 // import * as FileSystem from 'expo-file-system';  // Import expo-file-system for downloading files
 // import * as DocumentPicker from "expo-document-picker";
@@ -108,30 +109,23 @@ const handleFilePick = async () => {
   try {
     const result = await DocumentPicker.pickSingle({
       type: "*/*", // Accept all file types
-      copyToCacheDirectory: true,  // Optional, to copy to a temporary directory
+      copyToCacheDirectory: true,
     });
-  console.log(result,"result22222")
-
-   
 
     const originalFileName = result.name;
-    console.log("Original File Name:", originalFileName);
+    console.warn("Original File Name:", originalFileName);
     const originalFileUri = result.uri;
 
-    const fileExtension = originalFileName.split('.').pop();
-    const baseFileName = originalFileName.replace(`.${fileExtension}`, '');
-    const updatedFileName = `${baseFileName}_3dDrawing.${fileExtension}`;
+    const updatedFileName = generateUniqueFileName(originalFileName);
 
-    setgetFileName(updatedFileName); // Updating state for debugging
-    setFileUri(originalFileUri); // Updating state for debugging
+    setgetFileName(updatedFileName);
+    setFileUri(originalFileUri);
 
     console.log("Updated File Name:", updatedFileName);
     console.log("Original File URI:", originalFileUri);
 
-    // Await the payload preparation to ensure it's fully created before using it
     const jsonPayload = await prepareJsonPayload(updatedFileName);
-console.warn(prepareJsonPayload,"prepareJsonPayload");
-
+    console.warn(prepareJsonPayload, "prepareJsonPayload");
     if (!jsonPayload) {
       alert("Failed to prepare the payload.");
       return;
@@ -139,12 +133,11 @@ console.warn(prepareJsonPayload,"prepareJsonPayload");
 
     console.log("Prepared JSON Payload:", jsonPayload);
 
-    // Upload the drawing details
     const uploadResponse = await uploadDrawingDetails(jsonPayload);
 
     if (uploadResponse.status === "true") {
-      await uploadFile(originalFileUri,updatedFileName);
-      // alert("File uploaded successfully!");
+      await uploadFile(originalFileUri, updatedFileName);
+      alert("File uploaded successfully!");
     } else {
       console.error("API uploadDrawingDetails failed:", uploadResponse.response);
       alert("3D drawing upload failed.");
@@ -153,6 +146,16 @@ console.warn(prepareJsonPayload,"prepareJsonPayload");
     console.error("Error in handleFilePick:", error.message);
     alert("Error picking or uploading file.");
   }
+};
+const generateUniqueFileName = (originalFileName) => {
+  const fileExtension = originalFileName.split('.').pop();
+  const derivedBase = originalFileName.replace(`.${fileExtension}`, '');
+
+  const uniqueId = `${Date.now().toString().slice(-6)}${Math.floor(Math.random() * 900 + 100)}`;
+  const dateStr = moment().format('DDMMYYYY');
+  const projectNo = projectData[0]?.PROJECT_NO || 'NA';
+
+  return `${projectNo}_${derivedBase}_${uniqueId}_${dateStr}_3dDrawing.${fileExtension}`;
 };
 
 
@@ -392,6 +395,7 @@ const styles = StyleSheet.create({
   heading: {
     marginLeft: responsiveWidth(4),
     fontSize: responsiveFontSize(1.8),
+    color:'#000'
   },
   TaskHeading: {
     color: '#4d8f91',

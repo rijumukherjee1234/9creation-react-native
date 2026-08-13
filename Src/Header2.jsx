@@ -40,14 +40,16 @@ useEffect(()=>{
            </View>
            <TouchableOpacity onPress={handleprees}>
             <View style={styles.boxView}>
-            <Image
-            source={require("../assets/logo10.jpg")}
-            style={{
-              width: responsiveWidth(10),
-              height: responsiveHeight(5),
-              marginTop:responsiveHeight(1.8)
-            }}
-          />
+             <Image
+                     source={require("../assets/css-logo.png")}
+                     style={{
+                       width: responsiveWidth(20),
+                       height: responsiveHeight(5),
+                       marginTop:responsiveHeight(1.8),
+                       //  marginRight:responsiveWidth(5),
+                        marginLeft:responsiveWidth(-5)
+                     }}
+                   />
           
             </View>
             </TouchableOpacity>

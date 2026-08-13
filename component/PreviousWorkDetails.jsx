@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
   heading: {
     marginLeft: responsiveWidth(4),
     fontSize: responsiveFontSize(1.5),
+    color:'#000'
   },
   boxmain: {
     borderWidth: 1,

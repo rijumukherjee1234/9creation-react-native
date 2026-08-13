@@ -108,14 +108,15 @@ const Login = () => {
   return (
     <View style={styles.MainContainer}>
         <Image
-          source={require("../assets/logo10.jpg")}
-          style={{
-            width: responsiveWidth(79),
-            height: responsiveHeight(18),
-            alignSelf: "center",
-            marginTop: responsiveHeight(7),
-            borderRadius: responsiveWidth(4),
-          }}
+          source={require("../assets/css-logo.png")}
+         style={{
+    width: responsiveWidth(50),  
+    height: responsiveHeight(12), 
+    alignSelf: "center",
+    marginTop: responsiveHeight(5), 
+    borderRadius: responsiveWidth(2), 
+    resizeMode: 'contain', 
+  }}
         />
       
       <View style={{marginTop:responsiveHeight(5)}}> 
@@ -187,7 +188,8 @@ const styles = StyleSheet.create({
     width: responsiveWidth(90),
     alignSelf: 'center',
     fontWeight: 'bold',
-    paddingLeft:responsiveWidth(4)
+    paddingLeft:responsiveWidth(4),
+    color:'#000'
   },
   passwordContainer: {
     position: 'relative',

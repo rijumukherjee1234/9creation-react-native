@@ -198,20 +198,24 @@ const styles = StyleSheet.create({
     },
     lebelHeadingtxt:{
       fontSize: responsiveFontSize(1.5),
-      paddingLeft:responsiveWidth(2)
+      paddingLeft:responsiveWidth(2),
+      color:'#000'
     },
     lebelHeadingtxtaddress:{
       fontSize: responsiveFontSize(1.5),
       paddingLeft:responsiveWidth(1),
-      width:responsiveWidth(70)
+      width:responsiveWidth(70),
+      color:'#000'
     },
     lebelHeadingtxtmain:{
       fontSize: responsiveFontSize(1.5),
-      paddingLeft:responsiveWidth(2)
+      paddingLeft:responsiveWidth(2),
+      color:'#000'
     },
     lebelgtxt: {
       fontSize: responsiveFontSize(1.5),
-      paddingLeft:responsiveWidth(10)
+      paddingLeft:responsiveWidth(10),
+      color:'#000'
     },
     lebelgtxtside: {
       fontSize: responsiveFontSize(1.5),
